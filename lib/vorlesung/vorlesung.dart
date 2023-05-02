@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../components/drawer.dart';
+
 class Vorlesung extends StatelessWidget {
   const Vorlesung({super.key});
 
@@ -10,6 +12,7 @@ class Vorlesung extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Vorlesung'),
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: ElevatedButton(
           onPressed: () {

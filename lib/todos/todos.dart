@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../components/drawer.dart';
+
 class Todos extends StatelessWidget {
   const Todos({super.key});
 
@@ -10,6 +12,7 @@ class Todos extends StatelessWidget {
       appBar: AppBar(
         title: const Text('ToDo\'s'),
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: ElevatedButton(
           onPressed: () {

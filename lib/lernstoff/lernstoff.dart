@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:keep_on_track/components/drawer.dart';
 
 class Lernstoff extends StatelessWidget {
   const Lernstoff({super.key});
@@ -10,6 +11,7 @@ class Lernstoff extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Lernstoff'),
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: ElevatedButton(
           onPressed: () {

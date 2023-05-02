@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../components/drawer.dart';
+
 class Termin extends StatelessWidget {
   const Termin({super.key});
 
@@ -10,6 +12,7 @@ class Termin extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Terminübersicht'),
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: ElevatedButton(
           onPressed: () {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keep_on_track/components/drawer.dart';
 import 'package:keep_on_track/lernstoff/lernstoff.dart';
 import 'package:keep_on_track/stundenplan/studenplan.dart';
 import 'package:keep_on_track/termin/termin.dart';
@@ -59,37 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('AppBar Demo'),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.navigate_next),
-            tooltip: 'Go to the next page',
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Test'),
-                    ),
-                    body: const Center(
-                      child: Text(
-                        'This is the next page',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                },
-              ));
-            },
-          ),
         ],
       ),
+      drawer: CustomDrawer(),
       body: Center(
         child: Column(
           children: [

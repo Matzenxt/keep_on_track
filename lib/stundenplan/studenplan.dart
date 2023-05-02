@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../components/drawer.dart';
+
 class Stundenplan extends StatelessWidget {
   const Stundenplan({super.key});
 
@@ -10,6 +12,7 @@ class Stundenplan extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Stundenplan'),
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: ElevatedButton(
           onPressed: () {
