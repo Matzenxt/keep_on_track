@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:keep_on_track/lernstoff/lernstoff.dart';
+import 'package:keep_on_track/stundenplan/studenplan.dart';
+import 'package:keep_on_track/termin/termin.dart';
+import 'package:keep_on_track/todos/todos.dart';
+import 'package:keep_on_track/vorlesung/vorlesung.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,12 +55,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         title: const Text('AppBar Demo'),
@@ -94,11 +93,47 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            TextButton(onPressed: onPressed, child: Text("Studenplan")),
-            TextButton(onPressed: onPressed, child: Text("ToDo's")),
-            TextButton(onPressed: onPressed, child: Text("Lernstoff")),
-            TextButton(onPressed: onPressed, child: Text("Vorlesungen")),
-            TextButton(onPressed: onPressed, child: Text("Terminübersicht")),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Stundenplan()),
+                  );
+                },
+                child: Text("Studenplan")
+            ),
+            TextButton(
+                onPressed:  () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Todos()),
+                  );
+                },
+                child: Text("ToDo's")),
+            TextButton(
+                onPressed:  () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Lernstoff()),
+                  );
+                },
+                child: Text("Lernstoff")),
+            TextButton(
+                onPressed:  () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Vorlesung()),
+                  );
+                },
+                child: Text("Vorlesungen")),
+            TextButton(
+                onPressed:  () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Termin()),
+                  );
+                },
+                child: Text("Terminübersicht")),
           ],
         ),
       ),
