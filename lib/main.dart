@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (BuildContext context) {
                   return Scaffold(
                     appBar: AppBar(
-                      title: const Text('Next page'),
+                      title: const Text('Test'),
                     ),
                     body: const Center(
                       child: Text(
