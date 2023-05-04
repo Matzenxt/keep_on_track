@@ -1,6 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -30,7 +30,13 @@ class NotificationService {
 
   notificationDetails() {
     return const NotificationDetails(
-      android: AndroidNotificationDetails('channelId', 'channelName'),
+      android: AndroidNotificationDetails(
+          'channelId2',
+          'channelName',
+        channelDescription: 'Test Beschreibung',
+        importance: Importance.max,
+        playSound: false,
+      ),
       iOS: DarwinNotificationDetails()
     );
   }
