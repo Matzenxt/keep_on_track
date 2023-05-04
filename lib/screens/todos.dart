@@ -1,16 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../components/drawer.dart';
 
-class Vorlesung extends StatelessWidget {
-  const Vorlesung({super.key});
+class Todos extends StatelessWidget {
+  const Todos({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Vorlesung'),
+        title: const Text('ToDo\'s'),
       ),
       drawer: const CustomDrawer(),
       body: Center(

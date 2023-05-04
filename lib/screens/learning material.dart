@@ -1,16 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:keep_on_track/components/drawer.dart';
 
-import '../components/drawer.dart';
-
-class Stundenplan extends StatelessWidget {
-  const Stundenplan({super.key});
+class Lernstoff extends StatelessWidget {
+  const Lernstoff({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stundenplan'),
+        title: const Text('Lernstoff'),
       ),
       drawer: const CustomDrawer(),
       body: Center(

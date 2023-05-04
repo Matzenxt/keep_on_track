@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:keep_on_track/lernstoff/lernstoff.dart';
-import 'package:keep_on_track/termin/termin.dart';
-import 'package:keep_on_track/todos/todos.dart';
-import 'package:keep_on_track/vorlesung/vorlesung.dart';
+import 'package:keep_on_track/screens/appointment.dart';
+import 'package:keep_on_track/screens/learning material.dart';
+import 'package:keep_on_track/screens/lecture.dart';
+import 'package:keep_on_track/screens/todos.dart';
 
-import '../stundenplan/studenplan.dart';
+import '../screens/timetable.dart';
 
 class CustomDrawer extends Drawer {
   const CustomDrawer({super.key});

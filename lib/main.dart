@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/components/drawer.dart';
+import 'package:keep_on_track/screens/appointment.dart';
+import 'package:keep_on_track/screens/learning material.dart';
+import 'package:keep_on_track/screens/lecture.dart';
+import 'package:keep_on_track/screens/timetable.dart';
+import 'package:keep_on_track/screens/todos.dart';
 import 'package:keep_on_track/services/notification_service.dart';
-import 'package:keep_on_track/lernstoff/lernstoff.dart';
-import 'package:keep_on_track/stundenplan/studenplan.dart';
-import 'package:keep_on_track/termin/termin.dart';
-import 'package:keep_on_track/todos/todos.dart';
-import 'package:keep_on_track/vorlesung/vorlesung.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
