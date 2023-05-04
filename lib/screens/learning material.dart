@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/components/drawer.dart';
 
-class Lernstoff extends StatelessWidget {
-  const Lernstoff({super.key});
+class LearningMaterial extends StatelessWidget {
+  const LearningMaterial({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -52,69 +52,89 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AppBar Demo'),
+        title: const Text('Keep on Track'),
         actions: <Widget>[
         ],
       ),
       drawer: CustomDrawer(),
-      body: Center(
-        child: Column(
-          children: [
-            TextButton(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+        child: Center(
+          child: Column(
+            children: [
+              MaterialButton(
+                color: Colors.lightBlue,
+                minWidth: double.infinity,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Stundenplan()),
+                    MaterialPageRoute(builder: (context) => const TimeTable()),
                   );
                 },
                 child: Text("Studenplan")
-            ),
-            TextButton(
-                onPressed:  () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Todos()),
-                  );
-                },
-                child: Text("ToDo's")),
-            TextButton(
-                onPressed:  () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Lernstoff()),
-                  );
-                },
-                child: Text("Lernstoff")),
-            TextButton(
-                onPressed:  () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Vorlesung()),
-                  );
-                },
-                child: Text("Vorlesungen")),
-            TextButton(
-                onPressed:  () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Termin()),
-                  );
-                },
-                child: Text("Terminübersicht")),
-            TextButton(
-                onPressed: () async {
-                  await testNotif();
-                },
-                child: Text("Show notification")
-            ),
-
-            TextButton(
-                onPressed: () async {
-                  await testNotifSche();
-                },
-                child: Text("Schedule notification")
-            )
-          ],
+              ),
+              MaterialButton(
+                  color: Colors.lightBlue,
+                  minWidth: double.infinity,
+                  onPressed:  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Todos()),
+                    );
+                  },
+                  child: Text("ToDo's")
+              ),
+              MaterialButton(
+                  color: Colors.lightBlue,
+                  minWidth: double.infinity,
+                  onPressed:  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LearningMaterial()),
+                    );
+                  },
+                  child: Text("Lernstoff")
+              ),
+              MaterialButton(
+                  color: Colors.lightBlue,
+                  minWidth: double.infinity,
+                  onPressed:  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Lecture()),
+                    );
+                  },
+                  child: Text("Vorlesungen")
+              ),
+              MaterialButton(
+                  color: Colors.lightBlue,
+                  minWidth: double.infinity,
+                  onPressed:  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Appointment()),
+                    );
+                  },
+                  child: Text("Terminübersicht")
+              ),
+              MaterialButton(
+                  color: Colors.lightBlue,
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    await testNotif();
+                  },
+                  child: Text("Show notification")
+              ),
+              MaterialButton(
+                  color: Colors.lightBlue,
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    await testNotifSche();
+                  },
+                  child: Text("Schedule notification")
+              )
+            ],
+          ),
         ),
       ),
     );

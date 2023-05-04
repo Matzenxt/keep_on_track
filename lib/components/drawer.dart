@@ -26,7 +26,7 @@ class CustomDrawer extends Drawer {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Stundenplan()),
+                MaterialPageRoute(builder: (context) => const TimeTable()),
               );
             },
           ),
@@ -46,7 +46,7 @@ class CustomDrawer extends Drawer {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Lernstoff()),
+                MaterialPageRoute(builder: (context) => const LearningMaterial()),
               );
             },
           ),
@@ -56,7 +56,7 @@ class CustomDrawer extends Drawer {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Vorlesung()),
+                MaterialPageRoute(builder: (context) => const Lecture()),
               );
             },
           ),
@@ -66,7 +66,7 @@ class CustomDrawer extends Drawer {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Termin()),
+                MaterialPageRoute(builder: (context) => const Appointment()),
               );
             },
           ),

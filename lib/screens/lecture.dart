@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../components/drawer.dart';
 
-class Vorlesung extends StatelessWidget {
-  const Vorlesung({super.key});
+class Lecture extends StatelessWidget {
+  const Lecture({super.key});
 
   @override
   Widget build(BuildContext context) {

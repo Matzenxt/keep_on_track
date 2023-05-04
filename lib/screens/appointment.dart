@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../components/drawer.dart';
 
-class Termin extends StatelessWidget {
-  const Termin({super.key});
+class Appointment extends StatelessWidget {
+  const Appointment({super.key});
 
   @override
   Widget build(BuildContext context) {

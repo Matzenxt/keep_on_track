@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../components/drawer.dart';
 
-class Stundenplan extends StatelessWidget {
-  const Stundenplan({super.key});
+class TimeTable extends StatelessWidget {
+  const TimeTable({super.key});
 
   @override
   Widget build(BuildContext context) {
