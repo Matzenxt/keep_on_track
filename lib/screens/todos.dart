@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/components/todo/TodoRow.dart';
-import 'package:keep_on_track/components/todo/todo.dart';
 import 'package:keep_on_track/data/model/todo.dart';
+import 'package:keep_on_track/screens/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
 import '../components/drawer.dart';
@@ -22,11 +22,8 @@ class _TodosState extends State<Todos> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return TodoDialog();
-              });
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoDialog(todo: null,)));
+          setState(() {});
         },
         child: const Icon(Icons.add),
       ),

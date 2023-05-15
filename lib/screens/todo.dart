@@ -17,9 +17,31 @@ class TodoDialog extends StatelessWidget {
       descriptionController.text = todo!.note;
     }
 
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      child: Padding(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('ToDo\'s'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final title = titleController.value.text;
+          final description = descriptionController.value.text;
+
+          if (title.isEmpty || description.isEmpty) {
+            return;
+          }
+
+          final ToDo model = ToDo(id: todo?.id, done: 0, title: title, note: description);
+          if(todo == null){
+            await TodoDatabaseHelper.addTodo(model);
+          }else{
+            await TodoDatabaseHelper.updateTodo(model);
+          }
+
+          Navigator.pop(context);
+        },
+        child: const Icon(Icons.save),
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
@@ -70,46 +92,6 @@ class TodoDialog extends StatelessWidget {
               onChanged: (str) {},
               maxLines: 5,
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: SizedBox(
-                height: 45,
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    onPressed: () async {
-                      final title = titleController.value.text;
-                      final description = descriptionController.value.text;
-
-                      if (title.isEmpty || description.isEmpty) {
-                        return;
-                      }
-
-                      final ToDo model = ToDo(id: todo?.id, done: 0, title: title, note: description);
-                      if(todo == null){
-                        await TodoDatabaseHelper.addTodo(model);
-                      }else{
-                        await TodoDatabaseHelper.updateTodo(model);
-                      }
-
-
-                      Navigator.pop(context);
-                    },
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                            const RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: Colors.white,
-                                  width: 0.75,
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                )))),
-                    child: Text( todo == null
-                        ? 'Save' : 'Edit',
-                      style: const TextStyle(fontSize: 20),
-                    )),
-              ),
-            )
           ],
         ),
       ),
