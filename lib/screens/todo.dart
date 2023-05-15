@@ -19,7 +19,10 @@ class TodoDialog extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ToDo\'s'),
+        title: Text(todo == null
+            ? 'Todo hinzufügen'
+            : 'Todo bearbeiten',
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -46,48 +49,40 @@ class TodoDialog extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(bottom: 40),
-              child: Center(
-                child: Text(
-                  todo == null
-                      ? 'Todo hinzufügen'
-                      : 'Todo bearbeiten',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(bottom: 40.0),
+              padding: const EdgeInsets.only(bottom: 8.0),
               child: TextFormField(
                 controller: titleController,
                 maxLines: 1,
                 decoration: const InputDecoration(
-                    hintText: 'Title',
-                    labelText: 'Note title',
+                    hintText: 'Titel',
+                    labelText: 'Todo Titel',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.white,
                           width: 0.75,
                         ),
                         borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ))),
+                          Radius.circular(8.0),
+                        ),
+                    ),
+                ),
               ),
             ),
             TextFormField(
               controller: descriptionController,
               decoration: const InputDecoration(
-                  hintText: 'Type here the note',
-                  labelText: 'Note description',
+                  hintText: 'Zusätzliche Notiz',
+                  labelText: 'Zusätzliche Notiz',
                   border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.white,
                         width: 0.75,
                       ),
                       borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ))),
+                        Radius.circular(8.0),
+                      ),
+                  ),
+              ),
               keyboardType: TextInputType.multiline,
               onChanged: (str) {},
               maxLines: 5,
