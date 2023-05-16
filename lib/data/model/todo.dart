@@ -1,7 +1,7 @@
 // TODO: Refactor and adopt to real use case. Just dummy placeholder.
 class ToDo {
   int? id;
-  int done;
+  bool done;
   String title;
   String note;
 
@@ -13,13 +13,13 @@ class ToDo {
 
   factory ToDo.fromJson(Map<String, dynamic> json) => ToDo(
       id: json['id'],
-      done: json['done'],
+      done: json['done'] == 1,
       title: json['title'],
       note: json['note']);
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'done': done,
+    'done': done ? 1 : 0,
     'title': title,
     'note': note,
   };

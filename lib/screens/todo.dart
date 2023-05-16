@@ -33,7 +33,7 @@ class TodoDialog extends StatelessWidget {
             return;
           }
 
-          final ToDo model = ToDo(id: todo?.id, done: 0, title: title, note: description);
+          final ToDo model = ToDo(id: todo?.id, done: false, title: title, note: description);
           if(todo == null){
             await TodoDatabaseHelper.addTodo(model);
           }else{
