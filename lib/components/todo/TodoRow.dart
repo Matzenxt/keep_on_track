@@ -25,7 +25,14 @@ class _TodoRowState extends State<TodoRow> {
             setState(() {});
           },
         ),
-        Icon(Icons.alarm),
+        IconButton(
+          icon: const Icon(Icons.alarm),
+          tooltip: 'Benachrichtigung',
+          onPressed: () {
+            // TODO: Functionality
+            setState(() {});
+          },
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Column(
@@ -34,6 +41,15 @@ class _TodoRowState extends State<TodoRow> {
               Text(widget.todo.note),
             ],
           ),
+        ),
+        // TODO: Take max width with title and note or align edit iconbutton to the right.
+        IconButton(
+          icon: const Icon(Icons.edit),
+          tooltip: 'Bearbeiten',
+          onPressed: () {
+            // TODO: Functionality
+            setState(() {});
+          },
         ),
       ],
     );
