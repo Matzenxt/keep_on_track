@@ -3,27 +3,41 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/services/database/lecture.dart';
 
-class LectureScreen extends StatelessWidget {
+class LectureScreen extends StatefulWidget {
   final Lecture? lecture;
 
   const LectureScreen({Key? key, this.lecture}) : super(key: key);
 
   @override
+  State<LectureScreen> createState() => _LectureScreenState();
+}
+
+class _LectureScreenState extends State<LectureScreen> {
+  final titleController = TextEditingController();
+  final instructorController = TextEditingController();
+
+  Color color = Colors.red;
+
+  @override
   Widget build(BuildContext context) {
-    final titleController = TextEditingController();
-    final instructorController = TextEditingController();
+    if(widget.lecture != null) {
+      titleController.text = widget.lecture!.title;
+      instructorController.text = widget.lecture!.instructor;
+      //color = Color.fromARGB(widget.lecture!.color.alpha, widget.lecture!.color.red, widget.lecture!.color.green, widget.lecture!.color.blue);
+      Color tempColor = widget.lecture!.color;
+      int a = tempColor.alpha;
+      int r = tempColor.red;
+      int g = tempColor.green;
+      int b = tempColor.blue;
 
-    Color color = Color.fromARGB(0, 0, 0, 0);
-
-    if(lecture != null) {
-      titleController.text = lecture!.title;
-      instructorController.text = lecture!.instructor;
-      color = lecture!.color;
+      var test = widget.lecture!.toJson();
+      Lecture temp = Lecture.fromJson(test);
+      //color = temp.color;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(lecture == null
+        title: Text(widget.lecture == null
             ? 'Vorlesung hinzufügen'
             : 'Vorlesung bearbeiten',
         ),
@@ -39,12 +53,12 @@ class LectureScreen extends StatelessWidget {
 
           Navigator.pop(context);
 
-          final Lecture model = Lecture(id: lecture?.id, title: title, instructor: instructor, color: color);
-          if(lecture == null){
+          if(widget.lecture == null) {
+            final Lecture model = Lecture(id: widget.lecture?.id, title: title, instructor: instructor, color: color);
             await LectureDatabaseHelper.add(model);
-          }else{
-            lecture?.color = color;
-            await LectureDatabaseHelper.update(model);
+          } else {
+            //widget.lecture?.color = color;
+            await LectureDatabaseHelper.update(widget.lecture!);
           }
         },
         child: const Icon(Icons.save),
@@ -92,15 +106,59 @@ class LectureScreen extends StatelessWidget {
               onChanged: (str) {},
               maxLines: 5,
             ),
-            ColorPicker(
-                pickerColor: color,
-                onColorChanged: (selColor) {
-                  color = selColor;
-                },
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: widget.lecture != null? widget.lecture!.color : color,
+                  ),
+                  width: 80,
+                  height: 80,
+                ),
+                ElevatedButton(
+                    onPressed: () => pickColor(context),
+                    child: const Text('Farbe auswählen')
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
+
+  void pickColor(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Farbe auswähle"),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              ColorPicker(
+                pickerColor: widget.lecture != null? widget.lecture!.color : color,
+                enableAlpha: false,
+                labelTypes: const [],
+                onColorChanged: (selectedColor) => {
+                  if (widget.lecture != null) {
+                    widget.lecture!.color = selectedColor
+                  } else {
+                    color = selectedColor
+                  },
+                  setState(() => {})
+                }
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Auswählen'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+  );
 }
