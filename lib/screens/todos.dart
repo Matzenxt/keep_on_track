@@ -50,7 +50,7 @@ class _TodosState extends State<Todos> {
             }
           } else {
             return Center(
-              child: Text("Fehler bei Snapshot"),
+              child: Text("Gerade gibt es nichts zu tun :)"),
             );
           }
         },
