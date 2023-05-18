@@ -18,7 +18,7 @@ class _LecturesState extends State<Lectures> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ToDo\'s'),
+        title: const Text('Vorlesungen'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
