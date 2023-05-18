@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keep_on_track/components/drawer.dart';
 import 'package:keep_on_track/screens/appointment.dart';
 import 'package:keep_on_track/screens/learning material.dart';
-import 'package:keep_on_track/screens/lecture.dart';
+import 'package:keep_on_track/screens/lecture/lectures.dart';
 import 'package:keep_on_track/screens/timetable.dart';
 import 'package:keep_on_track/screens/todos.dart';
 import 'package:keep_on_track/services/notification_service.dart';
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed:  () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Lecture()),
+                      MaterialPageRoute(builder: (context) => const Lectures()),
                     );
                   },
                   child: Text("Vorlesungen")

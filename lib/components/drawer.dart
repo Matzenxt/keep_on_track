@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/screens/appointment.dart';
 import 'package:keep_on_track/screens/learning material.dart';
-import 'package:keep_on_track/screens/lecture.dart';
+import 'package:keep_on_track/screens/lecture/lectures.dart';
 import 'package:keep_on_track/screens/todos.dart';
 
 import '../screens/timetable.dart';
@@ -56,7 +56,7 @@ class CustomDrawer extends Drawer {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Lecture()),
+                MaterialPageRoute(builder: (context) => const Lectures()),
               );
             },
           ),
