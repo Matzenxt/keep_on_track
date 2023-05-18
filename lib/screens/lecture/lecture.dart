@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/services/database/lecture.dart';
 
@@ -12,9 +13,12 @@ class LectureScreen extends StatelessWidget {
     final titleController = TextEditingController();
     final instructorController = TextEditingController();
 
+    Color color = Color.fromARGB(0, 0, 0, 0);
+
     if(lecture != null) {
       titleController.text = lecture!.title;
       instructorController.text = lecture!.instructor;
+      color = lecture!.color;
     }
 
     return Scaffold(
@@ -33,14 +37,15 @@ class LectureScreen extends StatelessWidget {
             return;
           }
 
-          final Lecture model = Lecture(id: lecture?.id, title: title, instructor: instructor, color: "#asdf");
+          Navigator.pop(context);
+
+          final Lecture model = Lecture(id: lecture?.id, title: title, instructor: instructor, color: color);
           if(lecture == null){
             await LectureDatabaseHelper.add(model);
           }else{
+            lecture?.color = color;
             await LectureDatabaseHelper.update(model);
           }
-
-          Navigator.pop(context);
         },
         child: const Icon(Icons.save),
       ),
@@ -86,6 +91,12 @@ class LectureScreen extends StatelessWidget {
               keyboardType: TextInputType.multiline,
               onChanged: (str) {},
               maxLines: 5,
+            ),
+            ColorPicker(
+                pickerColor: color,
+                onColorChanged: (selColor) {
+                  color = selColor;
+                },
             ),
           ],
         ),

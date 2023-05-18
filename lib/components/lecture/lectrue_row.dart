@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/lecture.dart';
+import 'package:keep_on_track/screens/lecture/lecture.dart';
 
 class LectureRow extends StatefulWidget {
   final Lecture lecture;
@@ -28,8 +29,9 @@ class _LectureRowState extends State<LectureRow> {
         IconButton(
           icon: const Icon(Icons.edit),
           tooltip: 'Bearbeiten',
-          onPressed: () {
-            // TODO: Functionality
+          onPressed: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (context) => LectureScreen(lecture: widget.lecture,)));
+
             setState(() {});
           },
         ),

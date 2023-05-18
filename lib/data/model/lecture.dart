@@ -1,8 +1,10 @@
+import 'dart:ui';
+
 class Lecture {
   int? id;
   String title;
   String instructor;
-  String color;
+  Color color;
 
   Lecture({
     this.id,
@@ -16,7 +18,7 @@ class Lecture {
         id: json['id'],
         title: json['title'],
         instructor: json['instructor'],
-        color: json['color'],
+        color: Color.fromARGB(json['colorA'], json['colorR'], json['colorG'], json['colorB']),
     );
 
     return lecture;
@@ -26,6 +28,9 @@ class Lecture {
     'id': id,
     'title': title,
     'instructor': instructor,
-    'color': color
+    'colorA': color.alpha,
+    'colorR': color.red,
+    'colorG': color.green,
+    'colorB': color.blue,
   };
 }
