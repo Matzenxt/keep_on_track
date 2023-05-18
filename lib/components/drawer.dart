@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keep_on_track/screens/appointment.dart';
 import 'package:keep_on_track/screens/learning material.dart';
 import 'package:keep_on_track/screens/lecture/lectures.dart';
-import 'package:keep_on_track/screens/todos.dart';
+import 'package:keep_on_track/screens/todo/todos.dart';
 
 import '../screens/timetable.dart';
 

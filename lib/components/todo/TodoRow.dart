@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/todo.dart';
+import 'package:keep_on_track/screens/todo/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
 class TodoRow extends StatefulWidget {
@@ -46,8 +47,8 @@ class _TodoRowState extends State<TodoRow> {
         IconButton(
           icon: const Icon(Icons.edit),
           tooltip: 'Bearbeiten',
-          onPressed: () {
-            // TODO: Functionality
+          onPressed: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (context) => TodoScreen(todo: widget.todo,)));
             setState(() {});
           },
         ),

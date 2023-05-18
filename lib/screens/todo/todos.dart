@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:keep_on_track/components/drawer.dart';
 import 'package:keep_on_track/components/todo/TodoRow.dart';
 import 'package:keep_on_track/data/model/todo.dart';
-import 'package:keep_on_track/screens/todo.dart';
+import 'package:keep_on_track/screens/todo/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
-import '../components/drawer.dart';
 
 class Todos extends StatefulWidget {
   const Todos({super.key});
@@ -22,7 +22,7 @@ class _TodosState extends State<Todos> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoDialog(todo: null,)));
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoScreen(todo: null,)));
           setState(() {});
         },
         child: const Icon(Icons.add),

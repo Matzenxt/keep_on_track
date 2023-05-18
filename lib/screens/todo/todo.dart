@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
-class TodoDialog extends StatelessWidget {
+class TodoScreen extends StatelessWidget {
   final ToDo? todo;
 
-  const TodoDialog({Key? key, this.todo}) : super(key: key);
+  const TodoScreen({Key? key, this.todo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
