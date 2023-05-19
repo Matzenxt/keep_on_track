@@ -70,6 +70,8 @@ class TodoScreen extends StatelessWidget {
           if(todo == null) {
             await TodoDatabaseHelper.addTodo(model);
           } else {
+            todo?.title = title;
+            todo?.note = description;
             model.done = todo!.done;
             await TodoDatabaseHelper.updateTodo(model);
           }
