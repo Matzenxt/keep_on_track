@@ -31,6 +31,37 @@ class _LectureScreenState extends State<LectureScreen> {
             ? 'Vorlesung hinzufügen'
             : 'Vorlesung bearbeiten',
         ),
+        actions: [
+          widget.lecture != null ? IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Vorlesung löschen"),
+                        content: Text("Magst du wirklich die Vorlesung löschen?"),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Abbrechen")
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                LectureDatabaseHelper.delete(widget.lecture!);
+                              },
+                              child: Text("Löschen")
+                          ),
+                        ],
+                      );
+                    },
+                );
+              },
+              icon: const Icon(Icons.delete_forever)
+          ) : Container(),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

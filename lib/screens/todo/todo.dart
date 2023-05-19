@@ -23,6 +23,37 @@ class TodoScreen extends StatelessWidget {
             ? 'Todo hinzufügen'
             : 'Todo bearbeiten',
         ),
+        actions: [
+          todo != null ? IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Todo löschen"),
+                      content: Text("Magst du wirklich das Todo löschen?"),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("Abbrechen")
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              TodoDatabaseHelper.deleteTodo(todo!);
+                            },
+                            child: Text("Löschen")
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Icons.delete_forever)
+          ) : Container(),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
