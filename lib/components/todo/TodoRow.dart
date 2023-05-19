@@ -41,11 +41,9 @@ class _TodoRowState extends State<TodoRow> {
               padding: const EdgeInsets.only(left: 8),
               child: Column(
                 children: [
-                  FittedBox(
-                    child: Text(
-                      widget.todo.title,
-                      textAlign: TextAlign.left,
-                    ),
+                  Text(
+                    widget.todo.title,
+                    textAlign: TextAlign.left,
                   ),
                   const Divider(
                     color: Colors.grey,

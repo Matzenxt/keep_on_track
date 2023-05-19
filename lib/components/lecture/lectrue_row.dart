@@ -23,24 +23,34 @@ class _LectureRowState extends State<LectureRow> {
       ),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Column(
-                children: [
-                  Text(widget.lecture.title),
-                  Text(widget.lecture.instructor),
-                ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Column(
+                  children: [
+                    Text(widget.lecture.title),
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 1 ,
+                      indent : 10,
+                      endIndent : 10,
+                    ),
+                    Text(widget.lecture.instructor),
+                  ],
+                ),
               ),
             ),
-            // TODO: Take max width with title and note or align edit iconbutton to the right.
-            IconButton(
-              icon: const Icon(Icons.edit),
-              tooltip: 'Bearbeiten',
-              onPressed: () async {
-                await Navigator.push(context, MaterialPageRoute(builder: (context) => LectureScreen(lecture: widget.lecture,)));
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: const Icon(Icons.edit),
+                tooltip: 'Bearbeiten',
+                onPressed: () async {
+                  await Navigator.push(context, MaterialPageRoute(builder: (context) => LectureScreen(lecture: widget.lecture,)));
 
-                setState(() {});
-              },
+                  setState(() {});
+                },
+              ),
             ),
           ],
         ),
