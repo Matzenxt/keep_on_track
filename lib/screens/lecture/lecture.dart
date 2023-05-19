@@ -78,6 +78,8 @@ class _LectureScreenState extends State<LectureScreen> {
           if(widget.lecture == null) {
             await LectureDatabaseHelper.add(model);
           } else {
+            widget.lecture!.title = title;
+            widget.lecture!.instructor = instructor;
             model.color = widget.lecture!.color;
             await LectureDatabaseHelper.update(model);
           }
@@ -161,12 +163,16 @@ class _LectureScreenState extends State<LectureScreen> {
                 enableAlpha: false,
                 labelTypes: const [],
                 onColorChanged: (selectedColor) => {
-                  if (widget.lecture != null) {
-                    widget.lecture!.color = selectedColor
+
+                  setState(() => {
+                    if (widget.lecture != null) {
+                    widget.lecture!.color = selectedColor,
+                    widget.lecture!.title = titleController.value.text,
+                    widget.lecture!.instructor = instructorController.value.text,
                   } else {
                     color = selectedColor
                   },
-                  setState(() => {})
+                  })
                 }
               ),
             ],
