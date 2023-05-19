@@ -23,16 +23,6 @@ class _LectureScreenState extends State<LectureScreen> {
     if(widget.lecture != null) {
       titleController.text = widget.lecture!.title;
       instructorController.text = widget.lecture!.instructor;
-      //color = Color.fromARGB(widget.lecture!.color.alpha, widget.lecture!.color.red, widget.lecture!.color.green, widget.lecture!.color.blue);
-      Color tempColor = widget.lecture!.color;
-      int a = tempColor.alpha;
-      int r = tempColor.red;
-      int g = tempColor.green;
-      int b = tempColor.blue;
-
-      var test = widget.lecture!.toJson();
-      Lecture temp = Lecture.fromJson(test);
-      //color = temp.color;
     }
 
     return Scaffold(
@@ -57,7 +47,6 @@ class _LectureScreenState extends State<LectureScreen> {
             final Lecture model = Lecture(id: widget.lecture?.id, title: title, instructor: instructor, color: color);
             await LectureDatabaseHelper.add(model);
           } else {
-            //widget.lecture?.color = color;
             await LectureDatabaseHelper.update(widget.lecture!);
           }
         },

@@ -33,14 +33,14 @@ class TodoScreen extends StatelessWidget {
             return;
           }
 
+          Navigator.pop(context);
+
           final ToDo model = ToDo(id: todo?.id, done: false, title: title, note: description);
-          if(todo == null){
+          if(todo == null) {
             await TodoDatabaseHelper.addTodo(model);
-          }else{
+          } else {
             await TodoDatabaseHelper.updateTodo(model);
           }
-
-          Navigator.pop(context);
         },
         child: const Icon(Icons.save),
       ),
