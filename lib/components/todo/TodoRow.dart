@@ -61,7 +61,6 @@ class _TodoRowState extends State<TodoRow> {
               ),
             ),
           ),
-          // TODO: Take max width with title and note or align edit iconbutton to the right.
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
