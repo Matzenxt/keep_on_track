@@ -43,11 +43,12 @@ class _LectureScreenState extends State<LectureScreen> {
 
           Navigator.pop(context);
 
+          final Lecture model = Lecture(id: widget.lecture?.id, title: title, instructor: instructor, color: color);
           if(widget.lecture == null) {
-            final Lecture model = Lecture(id: widget.lecture?.id, title: title, instructor: instructor, color: color);
             await LectureDatabaseHelper.add(model);
           } else {
-            await LectureDatabaseHelper.update(widget.lecture!);
+            model.color = widget.lecture!.color;
+            await LectureDatabaseHelper.update(model);
           }
         },
         child: const Icon(Icons.save),
