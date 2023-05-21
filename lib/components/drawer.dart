@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/screens/appointment.dart';
-import 'package:keep_on_track/screens/learning material.dart';
+import 'package:keep_on_track/screens/learning_material.dart';
 import 'package:keep_on_track/screens/lecture/lectures.dart';
 import 'package:keep_on_track/screens/todo/todos.dart';
 
@@ -14,7 +14,7 @@ class CustomDrawer extends Drawer {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),

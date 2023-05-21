@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:keep_on_track/components/drawer.dart';
 import 'package:keep_on_track/screens/appointment.dart';
-import 'package:keep_on_track/screens/learning material.dart';
+import 'package:keep_on_track/screens/learning_material.dart';
 import 'package:keep_on_track/screens/lecture/lectures.dart';
 import 'package:keep_on_track/screens/timetable.dart';
 import 'package:keep_on_track/screens/todo/todos.dart';
@@ -54,10 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Keep on Track'),
-        actions: <Widget>[
+        actions: const <Widget>[
         ],
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         child: Center(
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     MaterialPageRoute(builder: (context) => const TimeTable()),
                   );
                 },
-                child: Text("Studenplan")
+                child: const Text("Studenplan")
               ),
               MaterialButton(
                   color: Colors.lightBlue,
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(builder: (context) => const Todos()),
                     );
                   },
-                  child: Text("ToDo's")
+                  child: const Text("ToDo's")
               ),
               MaterialButton(
                   color: Colors.lightBlue,
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(builder: (context) => const LearningMaterial()),
                     );
                   },
-                  child: Text("Lernstoff")
+                  child: const Text("Lernstoff")
               ),
               MaterialButton(
                   color: Colors.lightBlue,
@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(builder: (context) => const Lectures()),
                     );
                   },
-                  child: Text("Vorlesungen")
+                  child: const Text("Vorlesungen")
               ),
               MaterialButton(
                   color: Colors.lightBlue,
@@ -116,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(builder: (context) => const Appointment()),
                     );
                   },
-                  child: Text("Terminübersicht")
+                  child: const Text("Terminübersicht")
               ),
               MaterialButton(
                   color: Colors.lightBlue,
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async {
                     await testNotif();
                   },
-                  child: Text("Show notification")
+                  child: const Text("Show notification")
               ),
               MaterialButton(
                   color: Colors.lightBlue,
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async {
                     await testNotifSche();
                   },
-                  child: Text("Schedule notification")
+                  child: const Text("Schedule notification")
               )
             ],
           ),

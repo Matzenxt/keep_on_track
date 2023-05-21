@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/components/drawer.dart';
-import 'package:keep_on_track/components/todo/TodoRow.dart';
+import 'package:keep_on_track/components/todo/todo_row.dart';
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/screens/todo/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';

@@ -55,7 +55,7 @@ class NotificationService {
         id,
         title,
         body,
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: 20)),
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 20)),
         notificationDetails(),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime

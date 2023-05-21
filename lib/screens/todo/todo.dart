@@ -25,8 +25,6 @@ class _TodoScreenState extends State<TodoScreen> {
       titleController.text = widget.todo!.title;
       descriptionController.text = widget.todo!.note;
 
-      print('From db: ${widget.todo!.alert}');
-
       if(widget.todo!.alert != null) {
         dateTime = widget.todo!.alert;
       }
@@ -184,9 +182,9 @@ class _TodoScreenState extends State<TodoScreen> {
 
     TimeOfDay? tempTime = await pickTme();
     if(tempTime == null) {
-      tempDateTime = DateTime(tempDateTime!.year, tempDateTime!.month, tempDateTime!.day);
+      tempDateTime = DateTime(tempDateTime.year, tempDateTime.month, tempDateTime.day);
     } else {
-      tempDateTime = DateTime(tempDateTime!.year, tempDateTime!.month, tempDateTime!.day, tempTime.hour, tempTime.minute);
+      tempDateTime = DateTime(tempDateTime.year, tempDateTime.month, tempDateTime.day, tempTime.hour, tempTime.minute);
     }
 
     return tempDateTime;
