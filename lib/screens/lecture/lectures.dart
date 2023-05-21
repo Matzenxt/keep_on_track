@@ -22,7 +22,7 @@ class _LecturesState extends State<Lectures> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (context) => const LectureScreen(lecture: null,)));
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => LectureScreen(lecture: null, deleteLecture: () => {},)));
           setState(() {});
         },
         child: const Icon(Icons.add),
@@ -35,21 +35,30 @@ class _LecturesState extends State<Lectures> {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Center(
-              child: Text("Fehler beim Laden: " + snapshot.error.toString()),
+              child: Text("Fehler beim Laden: ${snapshot.error}"),
             );
           } else if (snapshot.hasData) {
             if (snapshot.data != null) {
               return ListView.builder(
-                itemBuilder: (context, index) => LectureRow(lecture: snapshot.data![index]),
+                itemBuilder: (context, index) => LectureRow(
+                  deleteLecture: () => {
+                    setState(() {
+                      snapshot.data!.remove(snapshot.data![index]);
+                    })
+                  },
+                    lectures: snapshot.data,
+                    index: index,
+                    lecture: snapshot.data![index]
+                ),
                 itemCount: snapshot.data!.length,
               );
             } else {
-              return Center(
+              return const Center(
                 child: Text("Data null"),
               );
             }
           } else {
-            return Center(
+            return const Center(
               child: Text("Juhu, es gibt keine Vorlesungen :D"),
             );
           }

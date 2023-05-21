@@ -4,9 +4,13 @@ import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/services/database/lecture.dart';
 
 class LectureScreen extends StatefulWidget {
+  final Function deleteLecture;
+
+  final List<Lecture>? lectures;
+  final int? index;
   final Lecture? lecture;
 
-  const LectureScreen({Key? key, this.lecture}) : super(key: key);
+  const LectureScreen({Key? key, this.lectures, this.index, this.lecture, required this.deleteLecture}) : super(key: key);
 
   @override
   State<LectureScreen> createState() => _LectureScreenState();
@@ -38,21 +42,24 @@ class _LectureScreenState extends State<LectureScreen> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text("Vorlesung löschen"),
-                        content: Text("Magst du wirklich die Vorlesung löschen?"),
+                        title: const Text("Vorlesung löschen"),
+                        content: const Text("Magst du wirklich die Vorlesung löschen?"),
                         actions: [
                           TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Text("Abbrechen")
+                              child: const Text("Abbrechen")
                           ),
                           TextButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 Navigator.pop(context);
-                                LectureDatabaseHelper.delete(widget.lecture!);
+                                Navigator.pop(context);
+
+                                await LectureDatabaseHelper.delete(widget.lecture!);
+                                widget.deleteLecture();
                               },
-                              child: Text("Löschen")
+                              child: const Text("Löschen")
                           ),
                         ],
                       );
