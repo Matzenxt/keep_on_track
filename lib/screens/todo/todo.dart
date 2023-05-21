@@ -175,8 +175,6 @@ class _TodoScreenState extends State<TodoScreen> {
     );
   }
 
-  // TODO: Preserve old datetime when cancel
-
   Future<DateTime?> pickDateTime() async {
     DateTime? tempDateTime = await pickDate();
 
@@ -195,6 +193,7 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   Future<DateTime?> pickDate() => showDatePicker(
+      locale: const Locale('de'),
       context: context,
       initialDate: dateTime == null ? DateTime.now() : dateTime!,
       firstDate: DateTime(dateTime == null ? DateTime.now().year : dateTime!.year),

@@ -29,7 +29,7 @@ class _LectureRowState extends State<LectureRow> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 8),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     Text(widget.lecture.title),
