@@ -18,66 +18,72 @@ class _TodoRowState extends State<TodoRow> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
-      child: Row(
-        children: [
-          Checkbox(
-            checkColor: Colors.white,
-            value: widget.todo.done,
-            onChanged: (bool? value) async {
-              widget.todo.done = value!;
-              await TodoDatabaseHelper.updateTodo(widget.todo);
-              setState(() {});
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.alarm),
-            tooltip: 'Benachrichtigung',
-            onPressed: () {
-              // TODO: Functionality
-              setState(() {});
-            },
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Column(
-                children: [
-                  Text(
-                    widget.todo.title,
-                    textAlign: TextAlign.left,
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                    thickness: 1 ,
-                    indent : 10,
-                    endIndent : 10,
-                  ),
-                  Text(
-                    widget.todo.note,
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              icon: const Icon(Icons.edit),
-              tooltip: 'Bearbeiten',
-              onPressed: () async {
-                await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                    TodoScreen(
-                      todo: widget.todo,
-                      deleteTodo: widget.deleteTodo,
-                    )
-                ));
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        child: Row(
+          children: [
+            Checkbox(
+              checkColor: Colors.white,
+              value: widget.todo.done,
+              onChanged: (bool? value) async {
+                widget.todo.done = value!;
+                await TodoDatabaseHelper.updateTodo(widget.todo);
                 setState(() {});
               },
             ),
-          ),
-        ],
+            IconButton(
+              icon: const Icon(Icons.alarm),
+              tooltip: 'Benachrichtigung',
+              onPressed: () {
+                // TODO: Functionality
+                setState(() {});
+              },
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Column(
+                  children: [
+                    Text(
+                      widget.todo.title,
+                      textAlign: TextAlign.left,
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1 ,
+                      indent : 10,
+                      endIndent : 10,
+                    ),
+                    Text(
+                      widget.todo.note,
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: const Icon(Icons.edit),
+                tooltip: 'Bearbeiten',
+                onPressed: () async {
+                  await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                      TodoScreen(
+                        todo: widget.todo,
+                        deleteTodo: widget.deleteTodo,
+                      )
+                  ));
+                  setState(() {});
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
