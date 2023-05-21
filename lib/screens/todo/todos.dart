@@ -22,7 +22,12 @@ class _TodosState extends State<Todos> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoScreen(todo: null,)));
+          await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+            TodoScreen(
+              todo: null,
+              deleteTodo: () => {},
+            )
+          ));
           setState(() {});
         },
         child: const Icon(Icons.add),
@@ -35,21 +40,29 @@ class _TodosState extends State<Todos> {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Center(
-              child: Text("Fehler beim Laden: " + snapshot.error.toString()),
+              child: Text("Fehler beim Laden: ${snapshot.error}"),
             );
           } else if (snapshot.hasData) {
             if (snapshot.data != null) {
               return ListView.builder(
-                itemBuilder: (context, index) => TodoRow(todo: snapshot.data![index]),
+                itemBuilder: (context, index) =>
+                    TodoRow(
+                        todo: snapshot.data![index],
+                      deleteTodo: () => {
+                        setState(() {
+                          snapshot.data!.remove(snapshot.data![index]);
+                        })
+                      },
+                    ),
                 itemCount: snapshot.data!.length,
               );
             } else {
-              return Center(
+              return const Center(
                 child: Text("Data null"),
               );
             }
           } else {
-            return Center(
+            return const Center(
               child: Text("Gerade gibt es nichts zu tun :)"),
             );
           }

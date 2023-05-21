@@ -4,9 +4,11 @@ import 'package:keep_on_track/screens/todo/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
 class TodoRow extends StatefulWidget {
+  final Function deleteTodo;
+
   final ToDo todo;
 
-  const TodoRow({super.key, required this.todo});
+  const TodoRow({super.key, required this.todo, required this.deleteTodo});
 
   @override
   State<TodoRow> createState() => _TodoRowState();
@@ -65,7 +67,12 @@ class _TodoRowState extends State<TodoRow> {
               icon: const Icon(Icons.edit),
               tooltip: 'Bearbeiten',
               onPressed: () async {
-                await Navigator.push(context, MaterialPageRoute(builder: (context) => TodoScreen(todo: widget.todo,)));
+                await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    TodoScreen(
+                      todo: widget.todo,
+                      deleteTodo: widget.deleteTodo,
+                    )
+                ));
                 setState(() {});
               },
             ),

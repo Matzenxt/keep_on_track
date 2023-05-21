@@ -3,9 +3,11 @@ import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
 class TodoScreen extends StatelessWidget {
+  final Function deleteTodo;
+
   final ToDo? todo;
 
-  const TodoScreen({Key? key, this.todo}) : super(key: key);
+  const TodoScreen({Key? key, this.todo, required this.deleteTodo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +32,24 @@ class TodoScreen extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text("Todo löschen"),
-                      content: Text("Magst du wirklich das Todo löschen?"),
+                      title: const Text("Todo löschen"),
+                      content: const Text("Magst du wirklich das Todo löschen?"),
                       actions: [
                         TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text("Abbrechen")
+                            child: const Text("Abbrechen")
                         ),
                         TextButton(
                             onPressed: () {
                               Navigator.pop(context);
+                              Navigator.pop(context);
+
+                              deleteTodo();
                               TodoDatabaseHelper.deleteTodo(todo!);
                             },
-                            child: Text("Löschen")
+                            child: const Text("Löschen")
                         ),
                       ],
                     );
