@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
-class TodoScreen extends StatelessWidget {
+class TodoScreen extends StatefulWidget {
   final Function deleteTodo;
 
   final ToDo? todo;
@@ -10,23 +10,36 @@ class TodoScreen extends StatelessWidget {
   const TodoScreen({Key? key, this.todo, required this.deleteTodo}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final titleController = TextEditingController();
-    final descriptionController = TextEditingController();
+  State<TodoScreen> createState() => _TodoScreenState();
+}
 
-    if(todo != null) {
-      titleController.text = todo!.title;
-      descriptionController.text = todo!.note;
+class _TodoScreenState extends State<TodoScreen> {
+  DateTime? dateTime;
+
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    if(widget.todo != null) {
+      titleController.text = widget.todo!.title;
+      descriptionController.text = widget.todo!.note;
+
+      print('From db: ${widget.todo!.alert}');
+
+      if(widget.todo!.alert != null) {
+        dateTime = widget.todo!.alert;
+      }
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(todo == null
+        title: Text(widget.todo == null
             ? 'Todo hinzufügen'
             : 'Todo bearbeiten',
         ),
         actions: [
-          todo != null ? IconButton(
+          widget.todo != null ? IconButton(
               onPressed: () {
                 showDialog(
                   context: context,
@@ -46,8 +59,8 @@ class TodoScreen extends StatelessWidget {
                               Navigator.pop(context);
                               Navigator.pop(context);
 
-                              deleteTodo();
-                              TodoDatabaseHelper.deleteTodo(todo!);
+                              widget.deleteTodo();
+                              TodoDatabaseHelper.deleteTodo(widget.todo!);
                             },
                             child: const Text("Löschen")
                         ),
@@ -71,13 +84,15 @@ class TodoScreen extends StatelessWidget {
 
           Navigator.pop(context);
 
-          final ToDo model = ToDo(id: todo?.id, done: false, title: title, note: description);
-          if(todo == null) {
+          final ToDo model = ToDo(id: widget.todo?.id, done: false, title: title, note: description, alert: dateTime);
+          if(widget.todo == null) {
             await TodoDatabaseHelper.addTodo(model);
           } else {
-            todo?.title = title;
-            todo?.note = description;
-            model.done = todo!.done;
+            widget.todo?.title = title;
+            widget.todo?.note = description;
+            widget.todo?.alert = dateTime;
+
+            model.done = widget.todo!.done;
             await TodoDatabaseHelper.updateTodo(model);
           }
         },
@@ -126,9 +141,68 @@ class TodoScreen extends StatelessWidget {
               onChanged: (str) {},
               maxLines: 5,
             ),
+            ElevatedButton(
+                onPressed: () async {
+                  final date = await pickDateTime();
+
+                  setState(() {
+                    dateTime = date;
+
+                    if(widget.todo != null) {
+                      widget.todo!.title = titleController.value.text;
+                      widget.todo!.note = descriptionController.value.text;
+                      widget.todo!.alert = date;
+                    }
+                  });
+                },
+                child: Row(
+                  children: [
+                    const Icon(Icons.access_time_rounded),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Benachrichtigen am:'),
+                    ),
+                    Text(dateTime == null ?
+                    'Bitte Zeit auswählen' :
+                    '${dateTime!.day}-${dateTime!.month}-${dateTime!.year} - ${dateTime!.hour.toString().padLeft(2, '0')}:${dateTime!.minute.toString().padLeft(2, '0')}'
+                    ),
+                  ],
+                ),
+            ),
           ],
         ),
       ),
     );
   }
+
+  // TODO: Preserve old datetime when cancel
+
+  Future<DateTime?> pickDateTime() async {
+    DateTime? tempDateTime = await pickDate();
+
+    if(tempDateTime == null) {
+      return null;
+    }
+
+    TimeOfDay? tempTime = await pickTme();
+    if(tempTime == null) {
+      tempDateTime = DateTime(tempDateTime!.year, tempDateTime!.month, tempDateTime!.day);
+    } else {
+      tempDateTime = DateTime(tempDateTime!.year, tempDateTime!.month, tempDateTime!.day, tempTime.hour, tempTime.minute);
+    }
+
+    return tempDateTime;
+  }
+
+  Future<DateTime?> pickDate() => showDatePicker(
+      context: context,
+      initialDate: dateTime == null ? DateTime.now() : dateTime!,
+      firstDate: DateTime(dateTime == null ? DateTime.now().year : dateTime!.year),
+      lastDate: DateTime((dateTime == null ? DateTime.now() : dateTime!).year + 3)
+  );
+
+  Future<TimeOfDay?> pickTme() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(dateTime == null ? DateTime.now() : dateTime!)
+  );
 }

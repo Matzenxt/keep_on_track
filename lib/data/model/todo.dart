@@ -15,18 +15,18 @@ class ToDo {
       });
 
   factory ToDo.fromJson(Map<String, dynamic> json) => ToDo(
-        id: json['id'],
-        done: json['done'] == 1,
-        title: json['title'],
-        note: json['note'],
-        alert: json['alert'],
-      );
+    id: json['id'],
+    done: json['done'] == 1,
+    title: json['title'],
+    note: json['note'],
+    alert: json['alert'] == null ? null : DateTime.fromMillisecondsSinceEpoch(json['alert']),
+  );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'done': done ? 1 : 0,
         'title': title,
         'note': note,
-        'alert': alert,
+        'alert': alert == null ? null : alert!.toUtc().millisecondsSinceEpoch,
       };
 }
