@@ -63,13 +63,18 @@ class NotificationService {
     return flutterLocalNotificationsPlugin.show(id, title, body, _notificationDetails(), payload: payLoad);
   }
 
+  Future<void> updateNotificationTodo(ToDo todo) async {
+    cancelTodoNotification(todo);
+    scheduleNotificationTodo(todo);
+  }
+
   Future<Tuple2<bool, String>> scheduleNotificationTodo(ToDo todo) async {
     if(todo.alertDate != null && !todo.alertDate!.difference(DateTime.now()).isNegative) {
       Notification notification = Notification(notificationFor: NotificationFor.todo, alarmDateTime: todo.alertDate!);
       int ret = await NotificationDatabaseHelper.add(notification);
 
       todo.notificationID = ret;
-      TodoDatabaseHelper.updateTodo(todo);
+      TodoDatabaseHelper.addNotificationID(todo);
 
       scheduledNotification(
           id: todo.notificationID!,

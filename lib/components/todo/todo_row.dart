@@ -36,7 +36,6 @@ class _TodoRowState extends State<TodoRow> {
                 await TodoDatabaseHelper.updateTodo(widget.todo);
                 // TODO: When changed to done, cancel notification.
                 // TODO: When changed to todo, add notification back if wanted.
-                // TODO: Update notification time when datetime is changed.
                 setState(() {});
               },
             ),

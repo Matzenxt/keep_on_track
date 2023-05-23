@@ -1,5 +1,6 @@
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/services/database/database.dart';
+import 'package:keep_on_track/services/notification_service.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TodoDatabaseHelper {
@@ -11,6 +12,18 @@ class TodoDatabaseHelper {
 
   static Future<int> updateTodo(ToDo todo) async {
     final db = await DatabaseHelper.getDB();
+
+    NotificationService().updateNotificationTodo(todo);
+
+    return await db.update("Todo", todo.toJson(),
+        where: 'id = ?',
+        whereArgs: [todo.id],
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  // TODO: Refactor to just update notification id column.
+  static Future<int> addNotificationID(ToDo todo) async {
+    final db = await DatabaseHelper.getDB();
     return await db.update("Todo", todo.toJson(),
         where: 'id = ?',
         whereArgs: [todo.id],
@@ -19,6 +32,11 @@ class TodoDatabaseHelper {
 
   static Future<int> deleteTodo(ToDo todo) async {
     final db = await DatabaseHelper.getDB();
+
+    if(todo.notificationID != null) {
+      NotificationService().cancelTodoNotification(todo);
+    }
+
     return await db.delete(
       "Todo",
       where: 'id = ?',
