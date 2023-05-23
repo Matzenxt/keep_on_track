@@ -25,8 +25,8 @@ class _TodoScreenState extends State<TodoScreen> {
       titleController.text = widget.todo!.title;
       descriptionController.text = widget.todo!.note;
 
-      if(widget.todo!.alert != null) {
-        dateTime = widget.todo!.alert;
+      if(widget.todo!.alertDate != null) {
+        dateTime = widget.todo!.alertDate;
       }
     }
 
@@ -82,13 +82,13 @@ class _TodoScreenState extends State<TodoScreen> {
 
           Navigator.pop(context);
 
-          final ToDo model = ToDo(id: widget.todo?.id, done: false, title: title, note: description, alert: dateTime);
+          final ToDo model = ToDo(id: widget.todo?.id, done: false, title: title, note: description, alertDate: dateTime);
           if(widget.todo == null) {
             await TodoDatabaseHelper.addTodo(model);
           } else {
             widget.todo?.title = title;
             widget.todo?.note = description;
-            widget.todo?.alert = dateTime;
+            widget.todo?.alertDate = dateTime;
 
             model.done = widget.todo!.done;
             await TodoDatabaseHelper.updateTodo(model);
@@ -149,7 +149,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     if(widget.todo != null) {
                       widget.todo!.title = titleController.value.text;
                       widget.todo!.note = descriptionController.value.text;
-                      widget.todo!.alert = date;
+                      widget.todo!.alertDate = date;
                     }
                   });
                 },
@@ -158,7 +158,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     const Icon(Icons.access_time_rounded),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text('Benachrichtigen am:'),
+                      child: Text('Erinnern am:'),
                     ),
                     Text(dateTime == null ?
                     'Bitte Zeit auswählen' :

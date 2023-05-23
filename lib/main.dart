@@ -126,14 +126,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   child: const Text("Show notification")
               ),
-              MaterialButton(
-                  color: Colors.lightBlue,
-                  minWidth: double.infinity,
-                  onPressed: () async {
-                    await testNotifSche();
-                  },
-                  child: const Text("Schedule notification")
-              )
             ],
           ),
         ),
@@ -143,9 +135,5 @@ class _MyHomePageState extends State<MyHomePage> {
 
   testNotif() async {
     NotificationService().showNotification(title: 'Test', body: 'Test body');
-  }
-
-  testNotifSche() async {
-    NotificationService().showScheduledNotification(id: 1, title: 'Test', body: 'Test body', seconds: 30);
   }
 }

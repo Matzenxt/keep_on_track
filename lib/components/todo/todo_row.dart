@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/screens/todo/todo.dart';
 import 'package:keep_on_track/services/database/todo.dart';
+import 'package:keep_on_track/services/notification_service.dart';
+import 'package:tuple/tuple.dart';
 
 class TodoRow extends StatefulWidget {
   final Function deleteTodo;
@@ -32,15 +34,46 @@ class _TodoRowState extends State<TodoRow> {
               onChanged: (bool? value) async {
                 widget.todo.done = value!;
                 await TodoDatabaseHelper.updateTodo(widget.todo);
+                // TODO: When changed to done, cancel notification.
+                // TODO: When changed to todo, add notification back if wanted.
                 setState(() {});
               },
             ),
             IconButton(
-              icon: const Icon(Icons.alarm),
+              icon: widget.todo.notificationID != null ? const Icon(Icons.alarm) : const Icon(Icons.alarm_off),
               tooltip: 'Benachrichtigung',
-              onPressed: () {
-                // TODO: Functionality
-                setState(() {});
+              onPressed: () async {
+                if(widget.todo.alertDate != null) {
+                  if(widget.todo.notificationID == null) {
+                    Tuple2<bool, String> temp = await NotificationService().scheduleNotificationTodo(widget.todo);
+
+                    if(!temp.item1) {
+                      setState(() {
+                        widget.todo.notificationID = 0;
+                      });
+
+                      const snackBar = SnackBar(content: Text('Benachrichtigung aktiviert.'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      final snackBar = SnackBar(content: Text('Fehler beim aktiveren der Benachrichtigung: $temp'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  } else {
+                    print('Notification to delete id: ${widget.todo!.notificationID}');
+
+                    await NotificationService().cancelTodoNotification(widget.todo);
+
+                    setState(() {
+                      widget.todo.notificationID = null;
+                    });
+
+                    const snackBar = SnackBar(content: Text("Benachrichtigung deaktiviert"));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                } else {
+                  const snackBar = SnackBar(content: Text("Kein Datum für die Benachrichtigung gesetzt."));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               },
             ),
             Expanded(
