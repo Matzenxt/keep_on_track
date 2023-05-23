@@ -71,8 +71,6 @@ class NotificationService {
       todo.notificationID = ret;
       TodoDatabaseHelper.updateTodo(todo);
 
-      print('Notification added id: ${todo.notificationID}');
-
       scheduledNotification(
           id: todo.notificationID!,
           title: 'Todo: ${todo.title}',
@@ -89,8 +87,6 @@ class NotificationService {
 
   Future<void> cancelTodoNotification(ToDo todo) async {
     if(todo.notificationID != null) {
-      print('Notification to delete inner id: ${todo.notificationID}');
-
       await flutterLocalNotificationsPlugin.cancel(todo.notificationID!);
 
       final notification = await NotificationDatabaseHelper.getByID(todo.notificationID!);
@@ -98,6 +94,9 @@ class NotificationService {
       if(notification != null) {
         NotificationDatabaseHelper.delete(notification);
       }
+
+      todo.notificationID = null;
+      await TodoDatabaseHelper.updateTodo(todo);
     }
   }
 

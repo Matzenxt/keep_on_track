@@ -36,6 +36,7 @@ class _TodoRowState extends State<TodoRow> {
                 await TodoDatabaseHelper.updateTodo(widget.todo);
                 // TODO: When changed to done, cancel notification.
                 // TODO: When changed to todo, add notification back if wanted.
+                // TODO: Update notification time when datetime is changed.
                 setState(() {});
               },
             ),
@@ -47,20 +48,21 @@ class _TodoRowState extends State<TodoRow> {
                   if(widget.todo.notificationID == null) {
                     Tuple2<bool, String> temp = await NotificationService().scheduleNotificationTodo(widget.todo);
 
-                    if(!temp.item1) {
+                    if(temp.item1) {
                       setState(() {
-                        widget.todo.notificationID = 0;
                       });
 
                       const snackBar = SnackBar(content: Text('Benachrichtigung aktiviert.'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     } else {
-                      final snackBar = SnackBar(content: Text('Fehler beim aktiveren der Benachrichtigung: $temp'));
+                      setState(() {
+                        widget.todo.notificationID = null;
+                      });
+
+                      final snackBar = SnackBar(content: Text('Fehler beim aktiveren der Benachrichtigung: ${temp.item2}'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   } else {
-                    print('Notification to delete id: ${widget.todo!.notificationID}');
-
                     await NotificationService().cancelTodoNotification(widget.todo);
 
                     setState(() {
