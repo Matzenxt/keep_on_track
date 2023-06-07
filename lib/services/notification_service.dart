@@ -64,8 +64,8 @@ class NotificationService {
   }
 
   Future<void> updateNotificationTodo(ToDo todo) async {
-    cancelTodoNotification(todo);
-    scheduleNotificationTodo(todo);
+    await cancelTodoNotification(todo);
+    await scheduleNotificationTodo(todo);
   }
 
   Future<Tuple2<bool, String>> scheduleNotificationTodo(ToDo todo) async {
@@ -97,16 +97,15 @@ class NotificationService {
       final notification = await NotificationDatabaseHelper.getByID(todo.notificationID!);
 
       if(notification != null) {
-        NotificationDatabaseHelper.delete(notification);
+        await NotificationDatabaseHelper.delete(notification);
       }
 
-      todo.notificationID = null;
-      await TodoDatabaseHelper.updateTodo(todo);
+      await TodoDatabaseHelper.removeNotificationID(todo);
     }
   }
 
   Future<void> scheduledNotification(
-    {int id = 0,
+    {required int id,
     String? title,
     String? body,
     required NotificationDetails notificationDetails,

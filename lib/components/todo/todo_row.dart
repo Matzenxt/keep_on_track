@@ -34,8 +34,6 @@ class _TodoRowState extends State<TodoRow> {
               onChanged: (bool? value) async {
                 widget.todo.done = value!;
                 await TodoDatabaseHelper.updateTodo(widget.todo);
-                // TODO: When changed to done, cancel notification.
-                // TODO: When changed to todo, add notification back if wanted.
                 setState(() {});
               },
             ),
@@ -58,7 +56,7 @@ class _TodoRowState extends State<TodoRow> {
                         widget.todo.notificationID = null;
                       });
 
-                      final snackBar = SnackBar(content: Text('Fehler beim aktiveren der Benachrichtigung: ${temp.item2}'));
+                      final snackBar = SnackBar(content: Text(temp.item2));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   } else {

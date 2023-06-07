@@ -1,7 +1,10 @@
+import 'package:keep_on_track/data/model/Notification.dart';
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/services/database/database.dart';
 import 'package:keep_on_track/services/notification_service.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'notification.dart';
 
 class TodoDatabaseHelper {
   static Future<int> addTodo(ToDo todo) async {
@@ -13,7 +16,14 @@ class TodoDatabaseHelper {
   static Future<int> updateTodo(ToDo todo) async {
     final db = await DatabaseHelper.getDB();
 
-    NotificationService().updateNotificationTodo(todo);
+    if(todo.done && todo.notificationID != null) {
+      await NotificationService().cancelTodoNotification(todo);
+      todo.notificationID = null;
+    }
+
+    if(todo.notificationID != null) {
+      await NotificationService().updateNotificationTodo(todo);
+    }
 
     return await db.update("Todo", todo.toJson(),
         where: 'id = ?',
@@ -21,20 +31,24 @@ class TodoDatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  // TODO: Refactor to just update notification id column.
   static Future<int> addNotificationID(ToDo todo) async {
     final db = await DatabaseHelper.getDB();
-    return await db.update("Todo", todo.toJson(),
-        where: 'id = ?',
-        whereArgs: [todo.id],
-        conflictAlgorithm: ConflictAlgorithm.replace);
+
+    return await db.rawUpdate('UPDATE Todo SET notificationID = ? WHERE id = ?', [todo.notificationID, todo.id]);
+  }
+
+  static Future<int> removeNotificationID(ToDo todo) async {
+    final db = await DatabaseHelper.getDB();
+    await NotificationDatabaseHelper.delete(Notification(id: todo.notificationID, notificationFor: NotificationFor.todo, alarmDateTime: DateTime.now()));
+
+    return await db.rawUpdate('UPDATE Todo SET notificationID = ? WHERE id = ?', [null, todo.id]);
   }
 
   static Future<int> deleteTodo(ToDo todo) async {
     final db = await DatabaseHelper.getDB();
 
     if(todo.notificationID != null) {
-      NotificationService().cancelTodoNotification(todo);
+      await NotificationService().cancelTodoNotification(todo);
     }
 
     return await db.delete(

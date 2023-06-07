@@ -90,6 +90,7 @@ class _TodoScreenState extends State<TodoScreen> {
             widget.todo?.note = description;
             widget.todo?.alertDate = dateTime;
 
+            model.notificationID = widget.todo?.notificationID;
             model.done = widget.todo!.done;
             await TodoDatabaseHelper.updateTodo(model);
           }
