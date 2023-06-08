@@ -39,4 +39,19 @@ class LectureDatabaseHelper {
 
     return List.generate(maps.length, (index) => Lecture.fromJson(maps[index]));
   }
+
+  static Future<Lecture?> getByID(int id) async {
+    final db = await DatabaseHelper.getDB();
+    final List<Map<String, dynamic>> result = await db.query(
+      tableName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (result.isEmpty) {
+      return null;
+    }
+
+    return Lecture.fromJson(result[0]);
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/data/model/todo.dart';
+import 'package:keep_on_track/services/database/lecture.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 
 class TodoScreen extends StatefulWidget {
@@ -18,6 +20,8 @@ class _TodoScreenState extends State<TodoScreen> {
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+
+  Lecture? selectedLecture;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +171,35 @@ class _TodoScreenState extends State<TodoScreen> {
                     ),
                   ],
                 ),
+            ),
+            FutureBuilder<List<Lecture>?>(
+              future: LectureDatabaseHelper.getAll(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var data = snapshot.data!;
+                  return DropdownButton(
+                    value: selectedLecture ?? data[0],
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: data.map((Lecture items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items.title),
+                      );
+                    }).toList(),
+                    onChanged: (newVal) => setState(() => {
+                      selectedLecture = newVal!,
+
+                      if(selectedLecture != null) {
+                        widget.todo!.lectureID = selectedLecture!.id,
+                      } else {
+                        widget.todo!.lectureID = null,
+                      }
+                    }),
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
             ),
           ],
         ),

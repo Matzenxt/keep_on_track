@@ -1,4 +1,3 @@
-// TODO: Refactor and adopt to real use case. Just dummy placeholder.
 class ToDo {
   int? id;
   bool done;
@@ -6,6 +5,7 @@ class ToDo {
   String note;
   DateTime? alertDate;
   int? notificationID;
+  int? lectureID;
 
   ToDo(
       {this.id,
@@ -14,6 +14,7 @@ class ToDo {
       required this.note,
       this.alertDate,
       this.notificationID,
+      this.lectureID,
       });
 
   factory ToDo.fromJson(Map<String, dynamic> json) => ToDo(
@@ -22,7 +23,8 @@ class ToDo {
     title: json['title'],
     note: json['note'],
     alertDate: json['alertDate'] == null ? null : DateTime.fromMillisecondsSinceEpoch(json['alertDate']),
-    notificationID: json['notificationID']
+    notificationID: json['notificationID'],
+    lectureID: json['lectureID'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -32,5 +34,6 @@ class ToDo {
         'note': note,
         'alertDate': alertDate == null ? null : alertDate!.toUtc().millisecondsSinceEpoch,
         'notificationID': notificationID,
+        'lectureID': lectureID
       };
 }
