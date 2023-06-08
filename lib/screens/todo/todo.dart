@@ -172,29 +172,34 @@ class _TodoScreenState extends State<TodoScreen> {
                   ],
                 ),
             ),
-            FutureBuilder<List<Lecture>?>(
-              future: LectureDatabaseHelper.getAll(),
+            FutureBuilder<List<Lecture>>(
+              future: _getAllLectures(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var data = snapshot.data!;
                   return DropdownButton(
-                    value: selectedLecture ?? data[0],
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: data.map((Lecture items) {
+                    value: selectedLecture,
+                    isExpanded: true,
+                    items: data.map((Lecture lecture) {
                       return DropdownMenuItem(
-                        value: items,
-                        child: Text(items.title),
+                        value: lecture,
+                        child: Text(lecture.title),
                       );
                     }).toList(),
-                    onChanged: (newVal) => setState(() => {
-                      selectedLecture = newVal!,
-
-                      if(selectedLecture != null) {
-                        widget.todo!.lectureID = selectedLecture!.id,
-                      } else {
-                        widget.todo!.lectureID = null,
-                      }
-                    }),
+                    onChanged: (newVal) =>
+                    {
+                      setState(() => {
+                            selectedLecture = newVal!,
+                            if (selectedLecture != null)
+                              {
+                                widget.todo!.lectureID = selectedLecture!.id,
+                              }
+                            else
+                              {
+                                widget.todo!.lectureID = null,
+                              }
+                          })
+                    },
                   );
                 } else {
                   return const CircularProgressIndicator();
@@ -236,4 +241,22 @@ class _TodoScreenState extends State<TodoScreen> {
       context: context,
       initialTime: TimeOfDay.fromDateTime(dateTime == null ? DateTime.now() : dateTime!)
   );
+
+  Future<List<Lecture>> _getAllLectures() async {
+    List<Lecture> lectures = [];
+    List<Lecture>? temp = await LectureDatabaseHelper.getAll();
+
+    if(temp != null) {
+      lectures.addAll(temp!);
+
+      if(widget.todo != null && widget.todo!.lectureID != null) {
+        var result = lectures.firstWhere((element) => element.id == widget.todo!.lectureID!);
+        print('Found lecutre: ${result.title}');
+
+
+      }
+    }
+
+    return lectures;
+  }
 }

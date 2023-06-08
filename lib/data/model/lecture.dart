@@ -33,4 +33,11 @@ class Lecture {
     'colorG': color.green,
     'colorB': color.blue,
   };
+
+  @override
+  bool operator ==(dynamic other) =>
+      other != null && other is Lecture && this.id == other.id;
+
+  @override
+  int get hashCode => super.hashCode;
 }
