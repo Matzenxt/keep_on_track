@@ -21,6 +21,7 @@ class _TodoScreenState extends State<TodoScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
+  Lecture empty = Lecture(title: '---', instructor: '---', color: Colors.white);
   Lecture? selectedLecture;
 
   @override
@@ -86,7 +87,12 @@ class _TodoScreenState extends State<TodoScreen> {
 
           Navigator.pop(context);
 
-          final ToDo model = ToDo(id: widget.todo?.id, done: false, title: title, note: description, alertDate: dateTime);
+          final ToDo model = ToDo(id: widget.todo?.id, done: false, title: title, note: description, alertDate: dateTime, lectureID: null);
+
+          if(selectedLecture != null && selectedLecture!.title != '---') {
+            model.lectureID = selectedLecture!.id;
+          }
+
           if(widget.todo == null) {
             await TodoDatabaseHelper.addTodo(model);
           } else {
@@ -177,6 +183,19 @@ class _TodoScreenState extends State<TodoScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var data = snapshot.data!;
+
+                  if(widget.todo != null && widget.todo!.lectureID != null) {
+                    var result = data.where((element) => element.id == widget.todo!.lectureID!);
+
+                    if(result.isNotEmpty) {
+                      selectedLecture = result.first;
+                    } else {
+                      selectedLecture = empty;
+                    }
+                  } else {
+                    selectedLecture = empty;
+                  }
+
                   return DropdownButton(
                     value: selectedLecture,
                     isExpanded: true,
@@ -189,16 +208,19 @@ class _TodoScreenState extends State<TodoScreen> {
                     onChanged: (newVal) =>
                     {
                       setState(() => {
-                            selectedLecture = newVal!,
-                            if (selectedLecture != null)
-                              {
-                                widget.todo!.lectureID = selectedLecture!.id,
-                              }
-                            else
-                              {
-                                widget.todo!.lectureID = null,
-                              }
-                          })
+                        selectedLecture = newVal!,
+
+                        if(widget.todo != null) {
+                          if (newVal!.title != '---')
+                            {
+                              widget.todo!.lectureID = selectedLecture!.id,
+                            }
+                          else
+                            {
+                              widget.todo!.lectureID = null,
+                            }
+                        }
+                      })
                     },
                   );
                 } else {
@@ -246,15 +268,10 @@ class _TodoScreenState extends State<TodoScreen> {
     List<Lecture> lectures = [];
     List<Lecture>? temp = await LectureDatabaseHelper.getAll();
 
+    lectures.add(empty);
+
     if(temp != null) {
-      lectures.addAll(temp!);
-
-      if(widget.todo != null && widget.todo!.lectureID != null) {
-        var result = lectures.firstWhere((element) => element.id == widget.todo!.lectureID!);
-        print('Found lecutre: ${result.title}');
-
-
-      }
+      lectures.addAll(temp);
     }
 
     return lectures;
