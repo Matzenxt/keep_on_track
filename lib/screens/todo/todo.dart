@@ -217,7 +217,6 @@ class _TodoScreenState extends State<TodoScreen> {
                             alignment: Alignment.center,
                             child: Text(
                               lecture.title,
-                              // TODO: Add TextStyle to other text with colored background
                               style: TextStyle(
                                 color: ThemeData.estimateBrightnessForColor(lecture.color) == Brightness.dark ?
                                   Colors.white :

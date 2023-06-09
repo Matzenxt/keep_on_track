@@ -32,14 +32,30 @@ class _LectureRowState extends State<LectureRow> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Text(widget.lecture.title),
-                    const Divider(
-                      color: Colors.white,
+                    Text(
+                      widget.lecture.title,
+                      style: TextStyle(
+                        color: ThemeData.estimateBrightnessForColor(widget.lecture.color) == Brightness.dark ?
+                        Colors.white :
+                        Colors.black,
+                      ),
+                    ),
+                    Divider(
+                      color: ThemeData.estimateBrightnessForColor(widget.lecture.color) == Brightness.dark ?
+                      Colors.white :
+                      Colors.black,
                       thickness: 1 ,
                       indent : 10,
                       endIndent : 10,
                     ),
-                    Text(widget.lecture.instructor),
+                    Text(
+                      widget.lecture.instructor,
+                      style: TextStyle(
+                        color: ThemeData.estimateBrightnessForColor(widget.lecture.color) == Brightness.dark ?
+                        Colors.white :
+                        Colors.black,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -47,7 +63,12 @@ class _LectureRowState extends State<LectureRow> {
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
-                icon: const Icon(Icons.edit),
+                icon: Icon(
+                  Icons.edit,
+                  color: ThemeData.estimateBrightnessForColor(widget.lecture.color) == Brightness.dark ?
+                    Colors.white :
+                    Colors.black,
+                ),
                 tooltip: 'Bearbeiten',
                 onPressed: () async {
                   await Navigator.push(context, MaterialPageRoute(builder: (context) =>
