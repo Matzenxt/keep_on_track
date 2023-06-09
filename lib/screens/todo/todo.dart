@@ -21,7 +21,7 @@ class _TodoScreenState extends State<TodoScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  Lecture empty = Lecture(title: '---', instructor: '---', color: Colors.white);
+  Lecture empty = Lecture(title: '---', instructor: '---', color: Colors.black12);
   Lecture? selectedLecture;
 
   @override
@@ -196,32 +196,55 @@ class _TodoScreenState extends State<TodoScreen> {
                     selectedLecture = empty;
                   }
 
-                  return DropdownButton(
-                    value: selectedLecture,
-                    isExpanded: true,
-                    items: data.map((Lecture lecture) {
-                      return DropdownMenuItem(
-                        value: lecture,
-                        child: Text(lecture.title),
-                      );
-                    }).toList(),
-                    onChanged: (newVal) =>
-                    {
-                      setState(() => {
-                        selectedLecture = newVal!,
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: selectedLecture?.color,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: DropdownButton(
+                      value: selectedLecture,
+                      underline: const SizedBox.shrink(),
+                      isExpanded: true,
+                      items: data.map((Lecture lecture) {
+                        return DropdownMenuItem<Lecture>(
+                          value: lecture,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: lecture.color,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            margin: const EdgeInsets.all(2),
+                            alignment: Alignment.center,
+                            child: Text(
+                              lecture.title,
+                              // TODO: Add TextStyle to other text with colored background
+                              style: TextStyle(
+                                color: ThemeData.estimateBrightnessForColor(lecture.color) == Brightness.dark ?
+                                  Colors.white :
+                                  Colors.black,
+                              ),
+                            )
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (newVal) =>
+                      {
+                        setState(() => {
+                          selectedLecture = newVal!,
 
-                        if(widget.todo != null) {
-                          if (newVal!.title != '---')
-                            {
-                              widget.todo!.lectureID = selectedLecture!.id,
-                            }
-                          else
-                            {
-                              widget.todo!.lectureID = null,
-                            }
-                        }
-                      })
-                    },
+                          if(widget.todo != null) {
+                            if (newVal!.title != '---')
+                              {
+                                widget.todo!.lectureID = selectedLecture!.id,
+                              }
+                            else
+                              {
+                                widget.todo!.lectureID = null,
+                              }
+                          }
+                        })
+                      },
+                    ),
                   );
                 } else {
                   return const CircularProgressIndicator();
