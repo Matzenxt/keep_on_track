@@ -118,14 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   child: const Text("Terminübersicht")
               ),
-              MaterialButton(
-                  color: Colors.lightBlue,
-                  minWidth: double.infinity,
-                  onPressed: () async {
-                    await testNotif();
-                  },
-                  child: const Text("Show notification")
-              ),
             ],
           ),
         ),
