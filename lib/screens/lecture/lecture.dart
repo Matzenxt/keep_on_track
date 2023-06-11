@@ -23,6 +23,13 @@ class _LectureScreenState extends State<LectureScreen> {
   Color color = Colors.red;
 
   @override
+  void dispose() {
+    titleController.dispose();
+    instructorController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if(widget.lecture != null) {
       titleController.text = widget.lecture!.title;

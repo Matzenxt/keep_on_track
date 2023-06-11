@@ -25,6 +25,13 @@ class _TodoScreenState extends State<TodoScreen> {
   Lecture? selectedLecture;
 
   @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if(widget.todo != null) {
       titleController.text = widget.todo!.title;
