@@ -8,7 +8,11 @@ class Event {
   });
 
   @override
-  String toString() {
-    return title;
-  }
+  bool operator ==(Object other) => other is Event && title == other.title;
+
+  @override
+  int get hashCode => super.hashCode;
+
+  @override
+  String toString() => title;
 }
