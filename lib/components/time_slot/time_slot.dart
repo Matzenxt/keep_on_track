@@ -97,7 +97,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
 
           Navigator.pop(context);
 
-          final TimeSlot timeSlot = TimeSlot(lectureId: widget.lecture.id!, day: pickedDay!, startTime: pickedEndTime!, endTime: pickedEndTime!, room: room);
+          final TimeSlot timeSlot = TimeSlot(lectureId: widget.lecture.id!, day: pickedDay!, startTime: pickedStartTime!, endTime: pickedEndTime!, room: room);
 
           if(widget.timeSlot == null) {
             await TimeSlotDatabaseHelper.add(timeSlot);
@@ -158,7 +158,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final TimeOfDay? startTime = await pickTime();
+                final TimeOfDay? startTime = await pickStartTime();
 
                 setState(() {
                   pickedStartTime = startTime;
@@ -184,7 +184,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final TimeOfDay? endTime = await pickTime();
+                final TimeOfDay? endTime = await pickEndTime();
 
                 setState(() {
                   pickedEndTime = endTime;
@@ -214,11 +214,22 @@ class _TimeSlotState extends State<TimeSlotScreen> {
     );
   }
 
-  Future<TimeOfDay?> pickTime() => showTimePicker(
+  Future<TimeOfDay?> pickStartTime() => showTimePicker(
     context: context,
     initialTime: pickedStartTime == null ?
-      TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute) :
-      TimeOfDay.fromDateTime(DateTime(2000, 1, 1, pickedStartTime!.hour, pickedStartTime!.minute).add(const Duration(minutes: 90)))!
+      pickedEndTime == null ?
+        TimeOfDay.fromDateTime(DateTime.now().subtract(const Duration(minutes: 90))) :
+        TimeOfDay.fromDateTime(DateTime(2000, 1, 1, pickedEndTime!.hour, pickedEndTime!.minute).subtract(const Duration(minutes: 90))) :
+      TimeOfDay(hour: pickedStartTime!.hour, minute: pickedStartTime!.minute)
+  );
+
+  Future<TimeOfDay?> pickEndTime() => showTimePicker(
+    context: context,
+    initialTime: pickedEndTime == null ?
+      pickedStartTime == null ?
+        TimeOfDay.fromDateTime(DateTime.now().add(const Duration(minutes: 90))) :
+        TimeOfDay.fromDateTime(DateTime(2000, 1, 1, pickedStartTime!.hour, pickedStartTime!.minute).add(const Duration(minutes: 90))) :
+      TimeOfDay(hour: pickedEndTime!.hour, minute: pickedEndTime!.minute)
   );
 
   static String weekDaysToString(WeekDays day) {
