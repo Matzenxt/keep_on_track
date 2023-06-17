@@ -143,7 +143,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
               items: weekDays.map((WeekDays weekDay) {
                 return DropdownMenuItem<WeekDays>(
                   value: weekDay,
-                  child: Text(weekDay.toString())
+                  child: Text(weekDaysToString(weekDay))
                 );
               }).toList(),
               onChanged: (newVal) => {
@@ -220,4 +220,25 @@ class _TimeSlotState extends State<TimeSlotScreen> {
       TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute) :
       TimeOfDay.fromDateTime(DateTime(2000, 1, 1, pickedStartTime!.hour, pickedStartTime!.minute).add(const Duration(minutes: 90)))!
   );
+
+  static String weekDaysToString(WeekDays day) {
+    switch(day) {
+      case WeekDays.monday:
+        return 'Montag';
+      case WeekDays.tuesday:
+        return 'Dienstag';
+      case WeekDays.wednesday:
+        return 'Mittwoch';
+      case WeekDays.thursday:
+        return 'Donnerstag';
+      case WeekDays.friday:
+        return 'Freitag';
+      case WeekDays.saturday:
+        return 'Samstag';
+      case WeekDays.sunday:
+        return 'Sonntag';
+      default:
+        return 'Fehler';
+    }
+  }
 }

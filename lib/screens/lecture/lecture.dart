@@ -165,7 +165,9 @@ class _LectureScreenState extends State<LectureScreen> {
                 ],
               ),
             ),
-            Padding(
+
+            if(widget.lecture != null)
+              Padding(
               padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
               child: Container(
                 decoration: BoxDecoration(
@@ -183,9 +185,7 @@ class _LectureScreenState extends State<LectureScreen> {
                   child: Column(
                     children: [
                       const Text("Vorlesungszeiten:"),
-
-                      if(widget.lecture != null)
-                        FutureBuilder<List<TimeSlot>?>(
+                      FutureBuilder<List<TimeSlot>?>(
                           future: TimeSlotDatabaseHelper.getByLecture(widget.lecture!.id!),
                           builder: (context, AsyncSnapshot<List<TimeSlot>?> snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -218,18 +218,23 @@ class _LectureScreenState extends State<LectureScreen> {
                             }
                           },
                         ),
-
                       ElevatedButton(
-                          onPressed: () async => await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                            TimeSlotScreen(
-                                timeSlot: null,
-                                lecture: widget.lecture!,
-                                deleteTimeSlot: () => {
-                                  // TODO: Add delete functionality
-                                }
-                              )
-                            ),
-                          ),
+                          onPressed: () async {
+                            await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                TimeSlotScreen(
+                                    timeSlot: null,
+                                    lecture: widget.lecture!,
+                                    deleteTimeSlot: () => {
+                                      // TODO: Add delete functionality
+                                    }
+                                ),
+                              ),
+                            );
+
+                            setState(() {
+
+                            });
+                          },
                           child: const Icon(Icons.add)
                       ),
                     ],
@@ -237,6 +242,7 @@ class _LectureScreenState extends State<LectureScreen> {
                 ),
               ),
             )
+
           ],
         ),
       ),
