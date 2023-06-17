@@ -131,6 +131,45 @@ class _TimeTableState extends State<TimeTable> {
               initialDay: DateTime.now(),
               heightPerMinute: 0.5,
               eventArranger: const SideEventArranger(),
+              weekDayStringBuilder: (day) {
+                switch(day) {
+                  case 0:
+                    return 'Mo';
+                  case 1:
+                    return 'Di';
+                  case 2:
+                    return 'Mi';
+                  case 3:
+                    return 'Do';
+                  case 4:
+                    return 'Fr';
+                  case 5:
+                    return 'Sa';
+                  case 6:
+                    return 'So';
+                  default:
+                    return 'Err';
+                }
+              },
+              weekPageHeaderBuilder: (startDate, endDate) {
+                return const Center(
+                  child: Row(
+                    children: [],
+                  )
+                );
+              },
+              weekNumberBuilder: (date) {
+                DateTime firstDate = DateTime.now();
+                return Center(
+                  child: Text('KW: ${date.getWeekDifference(DateTime(firstDate.year, 1, 1))}')
+                );
+              },
+              timeLineBuilder: (dateTime) {
+                return Container(
+                  alignment: Alignment.topCenter,
+                  child: Text('${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}'),
+                );
+              },
             ),
           ),
         )
