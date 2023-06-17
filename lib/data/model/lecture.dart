@@ -1,24 +1,34 @@
 import 'dart:ui';
 
+import 'package:keep_on_track/data/model/time_slot.dart';
+
 class Lecture {
   int? id;
   String title;
   String instructor;
   Color color;
+  List<TimeSlot> timeSlots;
 
   Lecture({
     this.id,
     required this.title,
     required this.instructor,
     required this.color,
+    required this.timeSlots,
   });
 
   factory Lecture.fromJson(Map<String, dynamic> json) {
+    int lectureID = json['id'];
+    List<TimeSlot> timeSlots = [];
+
+    // TODO: Load time slots from db
+
     Lecture lecture = Lecture(
-        id: json['id'],
+        id: lectureID,
         title: json['title'],
         instructor: json['instructor'],
         color: Color.fromARGB(json['colorA'], json['colorR'], json['colorG'], json['colorB']),
+        timeSlots: timeSlots,
     );
 
     return lecture;

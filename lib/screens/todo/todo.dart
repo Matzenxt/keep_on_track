@@ -21,7 +21,7 @@ class _TodoScreenState extends State<TodoScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  Lecture empty = Lecture(title: '---', instructor: '---', color: Colors.black12);
+  Lecture empty = Lecture(title: '---', instructor: '---', color: Colors.black12, timeSlots: []);
   Lecture? selectedLecture;
 
   @override
@@ -270,7 +270,7 @@ class _TodoScreenState extends State<TodoScreen> {
       return null;
     }
 
-    TimeOfDay? tempTime = await pickTme();
+    TimeOfDay? tempTime = await pickTime();
     if(tempTime == null) {
       tempDateTime = DateTime(tempDateTime.year, tempDateTime.month, tempDateTime.day);
     } else {
@@ -288,7 +288,7 @@ class _TodoScreenState extends State<TodoScreen> {
       lastDate: DateTime((dateTime == null ? DateTime.now() : dateTime!).year + 3)
   );
 
-  Future<TimeOfDay?> pickTme() => showTimePicker(
+  Future<TimeOfDay?> pickTime() => showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(dateTime == null ? DateTime.now() : dateTime!)
   );

@@ -73,7 +73,6 @@ class _LectureRowState extends State<LectureRow> {
                 onPressed: () async {
                   await Navigator.push(context, MaterialPageRoute(builder: (context) =>
                       LectureScreen(
-                        lectures: widget.lectures,
                         index: widget.index,
                         lecture: widget.lecture,
                         deleteLecture: () => {
