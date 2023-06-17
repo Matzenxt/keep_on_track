@@ -45,7 +45,7 @@ dependencies:
 
   # etc.
   flutter_colorpicker: 1.0.3
-  tuple: 2.0.1
+  tuple: 2.0.2
 
   table_calendar: 3.0.9
 
