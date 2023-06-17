@@ -42,43 +42,48 @@ class _TimeTableState extends State<TimeTable> {
           home: Scaffold(
             body: WeekView<TimeTableEvent>(
               controller: ec,
-              eventTileBuilder: (date, events, boundry, start, end) {
-                // Return your widget to display as event tile.
+              eventTileBuilder: (date, events, boundary, start, end) {
                 return GestureDetector(
                   child: Container(
-                    color: events[0].color,
-                    child: Column(
-                      children: [
-                        Text(
-                          events[0].title,
-                          style: TextStyle(
-                            color: ThemeData.estimateBrightnessForColor(events[0].color) == Brightness.dark ?
-                            Colors.white :
-                            Colors.black,
-                            fontSize: 14,
-                          )
-                        ),
-                        Text(
-                            events[0].description,
-                            textAlign: TextAlign.left,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: events[0].color,
+                    ),
+                    padding: const EdgeInsets.all(4),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            events[0].title,
                             style: TextStyle(
                               color: ThemeData.estimateBrightnessForColor(events[0].color) == Brightness.dark ?
                               Colors.white :
                               Colors.black,
-                              fontSize: 10,
+                              fontSize: 14,
                             )
-                        ),
-                        Text(
-                            events[0].event!.timeSlot.room,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: ThemeData.estimateBrightnessForColor(events[0].color) == Brightness.dark ?
-                              Colors.white :
-                              Colors.black,
-                              fontSize: 10,
-                            )
-                        ),
-                      ],
+                          ),
+                          Text(
+                              events[0].description,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: ThemeData.estimateBrightnessForColor(events[0].color) == Brightness.dark ?
+                                Colors.white :
+                                Colors.black,
+                                fontSize: 9,
+                              )
+                          ),
+                          Text(
+                              events[0].event!.timeSlot.room,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: ThemeData.estimateBrightnessForColor(events[0].color) == Brightness.dark ?
+                                Colors.white :
+                                Colors.black,
+                                fontSize: 9,
+                              )
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   onTap: () {
