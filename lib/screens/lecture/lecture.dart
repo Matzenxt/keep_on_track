@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:keep_on_track/components/time_slot.dart';
-import 'package:keep_on_track/components/time_slot_row.dart';
+import 'package:keep_on_track/components/time_slot/time_slot.dart';
+import 'package:keep_on_track/components/time_slot/time_slot_row.dart';
 import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/data/model/time_slot.dart';
 import 'package:keep_on_track/services/database/lecture.dart';
