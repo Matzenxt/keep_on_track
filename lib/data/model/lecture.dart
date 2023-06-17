@@ -8,6 +8,7 @@ class Lecture {
   String instructor;
   Color color;
   List<TimeSlot> timeSlots;
+  // TODO: Add field for short title
 
   Lecture({
     this.id,

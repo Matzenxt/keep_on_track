@@ -1,6 +1,7 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 
+// TODO: Add field description for ex. lecture, practice, labor...
 class TimeSlot {
   int? id;
   int lectureId;
