@@ -1,4 +1,3 @@
-import 'package:calendar_view/calendar_view.dart' as cv;
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/calender_event.dart';
 import 'package:keep_on_track/data/model/event.dart';
@@ -7,6 +6,7 @@ import 'package:keep_on_track/data/model/time_slot.dart';
 import 'package:keep_on_track/data/model/time_table_event.dart';
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/main.dart';
+import 'package:keep_on_track/services/database/lecture.dart';
 import 'package:keep_on_track/services/database/time_slot.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -24,20 +24,26 @@ class _AppointmentState extends State<Appointment> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
-  Map<DateTime, List<CalenderEvent>> allEvents = {
-    DateTime(2023, 06, 11): [Event(title: "Test 1", dateTime: DateTime.now())],
-    DateTime(2023, 06, 12): [Event(title: "Test 2", dateTime: DateTime.now()), Event(title: "Test 2.2", dateTime: DateTime.now())],
-    DateTime(2023, 06, 13): [Event(title: "Test 3", dateTime: DateTime.now())],
-    DateTime(2023, 06, 19): [TimeTableCalender(
-        timeSlot: TimeSlot(lectureId: 1, day: cv.WeekDays.monday, startTime: TimeOfDay(hour: 8, minute: 0), endTime: TimeOfDay(hour: 9, minute: 30), room: 'asd', type: TimeSlotType.lecture ),
-        lecture: Lecture(title: 'Lineare Algebra', shorthand: 'LA', instructor: 'Anic', color: Colors.red, timeSlots: []), startDate: DateTime.now(), endDate: DateTime.now().add(Duration(minutes: 90)))
-    ],
-  };
+  List<Lecture> lectures = [];
+
+  Map<DateTime, List<CalenderEvent>> allEvents = {};
+
+  Map<DateTime, List<CalenderEvent>> todoEvents = {};
+  Map<DateTime, List<CalenderEvent>> timeSlotEvents = {};
+  Map<DateTime, List<CalenderEvent>> appointmentEvents = {};
 
   @override
   void initState() {
-    // TODO: Load all timeslots, todos and events
     super.initState();
+
+    loadLectures().then((lecturesList) => lectures.addAll(lecturesList));
+
+    // TODO: Load all timeslots, todos and events
+    loadTodos().whenComplete(() => setState(() {
+      if(todoEvents.isNotEmpty) {
+        allEvents.addAll(todoEvents);
+      }
+    }));
   }
 
   List<CalenderEvent> _getEventsFromDay(DateTime date) {
@@ -83,8 +89,10 @@ class _AppointmentState extends State<Appointment> {
                  return eventEntry(event as Event);
                case TimeTableCalender:
                  return timeSlotEntry(event as TimeTableCalender);
+               case TodoEvent:
+                 return todoEntry(event as TodoEvent);
                default:
-                 return const Text('Fehler');
+                 return const Text('Fehler: Unbekanntes Event');
              }
             }),
           ],
@@ -110,7 +118,7 @@ class _AppointmentState extends State<Appointment> {
       //TODO: Load color
       leading: Icon(
         Icons.checklist,
-        color: Colors.red,
+        color: getLectureColor(todoEvent.lectureID),
       ),
       title: Text(todoEvent.title),
       subtitle: Text(todoEvent.alertDate!.toString()),
@@ -154,23 +162,52 @@ class _AppointmentState extends State<Appointment> {
     }
   }
 
+  Color getLectureColor(int? lectureID) {
+    if(lectureID != null) {
+      Iterable<Lecture> lectureIter = lectures.where((lecture) =>
+      lecture.id! == lectureID);
+
+      if (lectureIter.length == 1) {
+        return lectureIter.first.color;
+      }
+    }
+
+    return Colors.grey;
+  }
+
+  Future<List<Lecture>> loadLectures() async {
+    List<Lecture>? lectures = await LectureDatabaseHelper.getAll();
+
+    if(lectures != null) {
+      return lectures;
+    } else {
+      return [];
+    }
+  }
+
   Future<void> loadTodos() async {
     List<ToDo>? todos = await TodoDatabaseHelper.getAllTodos();
 
     if(todos != null) {
       for(ToDo todo in todos) {
         if(todo.alertDate != null) {
-          List<CalenderEvent>? temp = allEvents[DateTime(todo.alertDate!.year, todo.alertDate!.month, todo.alertDate!.day)];
+          List<CalenderEvent>? temp = todoEvents[DateTime(todo.alertDate!.year, todo.alertDate!.month, todo.alertDate!.day)];
+
+          TodoEvent event = TodoEvent(
+            done: todo.done,
+            title: todo.title,
+            note: todo.note,
+            alertDate: todo.alertDate,
+            lectureID: todo.lectureID,
+          );
+
           if(temp != null) {
-            temp.add(
-              TodoEvent(
-                done: todo.done,
-                title: todo.title,
-                note: todo.note,
-                alertDate: todo.alertDate,
-                lectureID: todo.lectureID,
-              )
-            );
+            todoEvents.update(DateTime(todo.alertDate!.year, todo.alertDate!.month, todo.alertDate!.day), (value) {
+                  value.add(event);
+                  return value;
+            });
+          } else {
+            todoEvents[DateTime(todo.alertDate!.year, todo.alertDate!.month, todo.alertDate!.day)] = [event];
           }
         }
       }
