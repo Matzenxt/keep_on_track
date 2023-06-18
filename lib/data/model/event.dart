@@ -1,4 +1,6 @@
-class Event {
+import 'package:keep_on_track/data/model/calender_event.dart';
+
+class Event extends CalenderEvent {
   final String title;
   DateTime dateTime;
 
@@ -15,4 +17,10 @@ class Event {
 
   @override
   String toString() => title;
+
+  @override
+  DateTime get endDate => dateTime;
+
+  @override
+  DateTime get startDate => dateTime;
 }

@@ -1,3 +1,5 @@
+import 'package:keep_on_track/data/model/calender_event.dart';
+
 class ToDo {
   int? id;
   bool done;
@@ -36,4 +38,20 @@ class ToDo {
         'notificationID': notificationID,
         'lectureID': lectureID
       };
+}
+
+class TodoEvent extends ToDo implements CalenderEvent {
+  TodoEvent({
+    required super.done,
+    required super.title,
+    required super.note,
+    super.alertDate,
+    super.lectureID
+  });
+
+  @override
+  DateTime get endDate => (alertDate == null ? DateTime.now() : alertDate!).add(const Duration(minutes: 15));
+
+  @override
+  DateTime get startDate => alertDate == null ? DateTime.now() : alertDate!;
 }

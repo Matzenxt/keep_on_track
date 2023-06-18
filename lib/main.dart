@@ -8,6 +8,9 @@ import 'package:keep_on_track/screens/timetable.dart';
 import 'package:keep_on_track/screens/todo/todos.dart';
 import 'package:keep_on_track/services/notification_service.dart';
 
+DateTime semesterStart = DateTime(2023, 4, 10);
+DateTime semesterEnd = DateTime(2023, 4, 10);
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();

@@ -1,3 +1,4 @@
+import 'package:keep_on_track/data/model/calender_event.dart';
 import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/data/model/time_slot.dart';
 
@@ -15,4 +16,19 @@ class TimeTableEvent {
 
   @override
   int get hashCode => super.hashCode;
+}
+
+class TimeTableCalender extends TimeTableEvent implements CalenderEvent {
+  DateTime startDate;
+  DateTime endDate;
+
+  TimeTableCalender({
+    required this.startDate,
+    required this.endDate,
+    required super.timeSlot,
+    required super.lecture
+  });
+
+  @override
+  String get title => lecture.title;
 }
