@@ -57,7 +57,7 @@ class _LectureScreenState extends State<LectureScreen> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text("Vorlesung löschen"),
-                        content: const Text("Magst du wirklich die Vorlesung löschen?"),
+                        content: const Text("Magst du wirklich die Vorlesung und alle dazugehörigen Todos und Timeslots löschen?"),
                         actions: [
                           TextButton(
                               onPressed: () {

@@ -7,6 +7,8 @@ import 'package:sqflite/sqflite.dart';
 import 'notification.dart';
 
 class TodoDatabaseHelper {
+  static const String tableName = 'Todo';
+
   static Future<int> addTodo(ToDo todo) async {
     final db = await DatabaseHelper.getDB();
     return await db.insert("Todo", todo.toJson(),
@@ -55,6 +57,15 @@ class TodoDatabaseHelper {
       "Todo",
       where: 'id = ?',
       whereArgs: [todo.id],
+    );
+  }
+
+  static Future<int> deleteByLecture(int lectureID) async {
+    final db = await DatabaseHelper.getDB();
+    return await db.delete(
+      tableName,
+      where: 'lectureID = ?',
+      whereArgs: [lectureID],
     );
   }
 

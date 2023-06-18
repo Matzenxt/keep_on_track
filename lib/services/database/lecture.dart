@@ -1,6 +1,7 @@
 import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/services/database/database.dart';
 import 'package:keep_on_track/services/database/time_slot.dart';
+import 'package:keep_on_track/services/database/todo.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LectureDatabaseHelper {
@@ -21,6 +22,7 @@ class LectureDatabaseHelper {
   }
 
   static Future<int> delete(Lecture lecture) async {
+    TodoDatabaseHelper.deleteByLecture(lecture.id!);
     TimeSlotDatabaseHelper.deleteByLecture(lecture.id!);
 
     final db = await DatabaseHelper.getDB();
