@@ -19,7 +19,7 @@ class TimeTable extends StatefulWidget {
 }
 
 class _TimeTableState extends State<TimeTable> {
-  EventController<TimeTableEvent> eventControler = EventController();
+  EventController<TimeTableEvent> eventController = EventController();
   List<CalendarEventData<TimeTableEvent>> timeSlots = [];
 
   @override
@@ -27,7 +27,7 @@ class _TimeTableState extends State<TimeTable> {
     super.initState();
     loadTimeSlots().whenComplete(() => setState(() {
         if(timeSlots.isNotEmpty) {
-          eventControler.addAll(timeSlots);
+          eventController.addAll(timeSlots);
         }
       }),
     );
@@ -36,12 +36,12 @@ class _TimeTableState extends State<TimeTable> {
   @override
   Widget build(BuildContext context) {
     return CalendarControllerProvider(
-        controller: eventControler,
+        controller: eventController,
         child: MaterialApp(
           scaffoldMessengerKey: snackbarKey,
           home: Scaffold(
             body: WeekView<TimeTableEvent>(
-              controller: eventControler,
+              controller: eventController,
               eventTileBuilder: (date, events, boundary, start, end) {
                 return GestureDetector(
                   child: Container(
