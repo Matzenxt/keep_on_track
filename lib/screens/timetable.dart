@@ -197,10 +197,10 @@ class _TimeTableState extends State<TimeTable> {
       if(lecture != null) {
         CalendarEventData<TimeTableEvent> event = CalendarEventData(
           date: date,
-          event: TimeTableEvent(timeSlot: time, lecture: lecture!),
+          event: TimeTableEvent(timeSlot: time, lecture: lecture),
           title: lecture.shorthand,
-          description: "Vorlesung",
-          color: lecture!.color,
+          description: time.typeToString(),
+          color: lecture.color,
           startTime: startDateTime,
           endTime: endDateTime,
         );
