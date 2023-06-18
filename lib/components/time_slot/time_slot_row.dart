@@ -18,20 +18,38 @@ class _TimeSlotState extends State<TimeSlotRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return Row(
       children: [
-        Text('Tag: ${widget.timeSlot.dayToText()}'),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-          child: Text('Raum: ${widget.timeSlot.room}'),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-          child: Text('Start: ${widget.timeSlot.startTime.hour.toString().padLeft(2, '0')}:${widget.timeSlot.startTime.minute.toString().padLeft(2, '0')}'),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-          child: Text('Ende: ${widget.timeSlot.endTime.hour.toString().padLeft(2, '0')}:${widget.timeSlot.endTime.minute.toString().padLeft(2, '0')}'),
+        Expanded(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text('Typ: ${widget.timeSlot!.typeToString()}'),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                    child: Text('Tag: ${widget.timeSlot.dayToText()}'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                    child: Text('Raum: ${widget.timeSlot.room}'),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                    child: Text('Start: ${widget.timeSlot.startTime.hour.toString().padLeft(2, '0')}:${widget.timeSlot.startTime.minute.toString().padLeft(2, '0')}'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                    child: Text('Ende: ${widget.timeSlot.endTime.hour.toString().padLeft(2, '0')}:${widget.timeSlot.endTime.minute.toString().padLeft(2, '0')}'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         IconButton(
           onPressed: () async => await Navigator.push(context, MaterialPageRoute(builder: (context) =>

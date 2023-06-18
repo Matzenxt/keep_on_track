@@ -19,7 +19,7 @@ class TimeTable extends StatefulWidget {
 }
 
 class _TimeTableState extends State<TimeTable> {
-  EventController<TimeTableEvent> ec = EventController();
+  EventController<TimeTableEvent> eventControler = EventController();
   List<CalendarEventData<TimeTableEvent>> timeSlots = [];
 
   @override
@@ -27,7 +27,7 @@ class _TimeTableState extends State<TimeTable> {
     super.initState();
     loadTimeSlots().whenComplete(() => setState(() {
         if(timeSlots.isNotEmpty) {
-          ec.addAll(timeSlots);
+          eventControler.addAll(timeSlots);
         }
       }),
     );
@@ -36,12 +36,12 @@ class _TimeTableState extends State<TimeTable> {
   @override
   Widget build(BuildContext context) {
     return CalendarControllerProvider(
-        controller: ec,
+        controller: eventControler,
         child: MaterialApp(
           scaffoldMessengerKey: snackbarKey,
           home: Scaffold(
             body: WeekView<TimeTableEvent>(
-              controller: ec,
+              controller: eventControler,
               eventTileBuilder: (date, events, boundary, start, end) {
                 return GestureDetector(
                   child: Container(
@@ -91,15 +91,14 @@ class _TimeTableState extends State<TimeTable> {
                       content: Column(
                         children: [
                           Text(
+                              '${events[0].event!.lecture.title} (${events[0].event!.lecture.shorthand})'
+                          ),
+                          Text(
                               '${events[0].event!.timeSlot.startTime.hour.toString().padLeft(2, '0')}:${events[0].event!.timeSlot.startTime.minute.toString().padLeft(2, '0')}'
                                   ' - ${events[0].event!.timeSlot.endTime.hour.toString().padLeft(2, '0')}:${events[0].event!.timeSlot.endTime.minute.toString().padLeft(2, '0')}'
                           ),
                           Text(
-                            // TODO: Add timeslot description
-                              '${events[0].title} - Vorlesung'
-                          ),
-                          Text(
-                              'Raum: ${events[0].event!.timeSlot.room}'
+                              '${events[0].event!.timeSlot.typeToString()} in ${events[0].event!.timeSlot.room}'
                           ),
                         ],
                       ),
@@ -191,8 +190,7 @@ class _TimeTableState extends State<TimeTable> {
         CalendarEventData<TimeTableEvent> event = CalendarEventData(
           date: date,
           event: TimeTableEvent(timeSlot: time, lecture: lecture!),
-          title: '${lecture.title}',
-          // TODO: Add timeslot new field to description.
+          title: lecture.shorthand,
           description: "Vorlesung",
           color: lecture!.color,
           startTime: startDateTime,

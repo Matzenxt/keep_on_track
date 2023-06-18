@@ -21,7 +21,7 @@ class _TodoScreenState extends State<TodoScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  Lecture empty = Lecture(title: '---', instructor: '---', color: Colors.black12, timeSlots: []);
+  Lecture empty = Lecture(title: '---', shorthand: '---', instructor: '---', color: Colors.black12, timeSlots: []);
   Lecture? selectedLecture;
 
   @override

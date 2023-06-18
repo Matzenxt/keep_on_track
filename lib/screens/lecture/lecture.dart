@@ -20,23 +20,27 @@ class LectureScreen extends StatefulWidget {
 }
 
 class _LectureScreenState extends State<LectureScreen> {
-  final titleController = TextEditingController();
-  final instructorController = TextEditingController();
+  final titleTextController = TextEditingController();
+  final instructorTextController = TextEditingController();
+  final shorthandTextController = TextEditingController();
 
   Color color = Colors.red;
 
   @override
   void dispose() {
-    titleController.dispose();
-    instructorController.dispose();
+    titleTextController.dispose();
+    instructorTextController.dispose();
+    shorthandTextController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     if(widget.lecture != null) {
-      titleController.text = widget.lecture!.title;
-      instructorController.text = widget.lecture!.instructor;
+      titleTextController.text = widget.lecture!.title;
+      instructorTextController.text = widget.lecture!.instructor;
+      shorthandTextController.text = widget.lecture!.shorthand;
     }
 
     return Scaffold(
@@ -82,20 +86,30 @@ class _LectureScreenState extends State<LectureScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final title = titleController.value.text;
-          final instructor = instructorController.value.text;
+          final title = titleTextController.value.text;
+          final instructor = instructorTextController.value.text;
+          final shorthand = shorthandTextController.value.text;
 
-          if (title.isEmpty || instructor.isEmpty) {
+          if (title.isEmpty || instructor.isEmpty || shorthand.isEmpty) {
             return;
           }
 
           Navigator.pop(context);
 
-          final Lecture model = Lecture(id: widget.lecture?.id, title: title, instructor: instructor, color: color, timeSlots: []);
+          final Lecture model = Lecture(
+            id: widget.lecture?.id,
+              title: title,
+              shorthand: shorthand,
+              instructor: instructor,
+              color: color,
+              timeSlots: []
+          );
+
           if(widget.lecture == null) {
             await LectureDatabaseHelper.add(model);
           } else {
             widget.lecture!.title = title;
+            widget.lecture!.shorthand = shorthand;
             widget.lecture!.instructor = instructor;
             model.color = widget.lecture!.color;
             await LectureDatabaseHelper.update(model);
@@ -108,9 +122,9 @@ class _LectureScreenState extends State<LectureScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
               child: TextFormField(
-                controller: titleController,
+                controller: titleTextController,
                 maxLines: 1,
                 decoration: const InputDecoration(
                   hintText: 'Vorlesung',
@@ -127,24 +141,49 @@ class _LectureScreenState extends State<LectureScreen> {
                 ),
               ),
             ),
-            TextFormField(
-              controller: instructorController,
-              decoration: const InputDecoration(
-                hintText: 'Professor',
-                labelText: 'Name des Professors',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                    width: 0.75,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+              child: TextFormField(
+                controller: shorthandTextController,
+                decoration: const InputDecoration(
+                  hintText: 'Kürzel für die Vorlesung',
+                  labelText: 'Kürzel',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                      width: 0.75,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
                   ),
                 ),
+                keyboardType: TextInputType.multiline,
+                onChanged: (str) {},
+                maxLines: 1,
               ),
-              keyboardType: TextInputType.multiline,
-              onChanged: (str) {},
-              maxLines: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+              child: TextFormField(
+                controller: instructorTextController,
+                decoration: const InputDecoration(
+                  hintText: 'Professor',
+                  labelText: 'Name des Professors',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                      width: 0.75,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                ),
+                keyboardType: TextInputType.multiline,
+                onChanged: (str) {},
+                maxLines: 5,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -265,8 +304,8 @@ class _LectureScreenState extends State<LectureScreen> {
                   setState(() => {
                     if (widget.lecture != null) {
                       widget.lecture!.color = selectedColor,
-                      widget.lecture!.title = titleController.value.text,
-                      widget.lecture!.instructor = instructorController.value.text,
+                      widget.lecture!.title = titleTextController.value.text,
+                      widget.lecture!.instructor = instructorTextController.value.text,
                     } else {
                       color = selectedColor
                     },

@@ -27,10 +27,18 @@ class _TimeSlotState extends State<TimeSlotScreen> {
     WeekDays.sunday,
   ];
 
+  final List<TimeSlotType> types = [
+    TimeSlotType.lecture,
+    TimeSlotType.practice,
+    TimeSlotType.tutorial,
+    TimeSlotType.labor,
+  ];
+
   TimeOfDay? pickedStartTime;
   TimeOfDay? pickedEndTime;
 
   WeekDays? pickedDay;
+  TimeSlotType? pickedType;
 
   final roomTextController = TextEditingController();
 
@@ -46,7 +54,8 @@ class _TimeSlotState extends State<TimeSlotScreen> {
       roomTextController.text = widget.timeSlot!.room;
       pickedDay = widget.timeSlot!.day;
       pickedStartTime = widget.timeSlot!.startTime;
-      pickedEndTime= widget.timeSlot!.endTime;
+      pickedEndTime = widget.timeSlot!.endTime;
+      pickedType = widget.timeSlot!.type;
     }
 
     return Scaffold(
@@ -97,7 +106,14 @@ class _TimeSlotState extends State<TimeSlotScreen> {
 
           Navigator.pop(context);
 
-          final TimeSlot timeSlot = TimeSlot(lectureId: widget.lecture.id!, day: pickedDay!, startTime: pickedStartTime!, endTime: pickedEndTime!, room: room);
+          final TimeSlot timeSlot = TimeSlot(
+            lectureId: widget.lecture.id!,
+            day: pickedDay!,
+            startTime: pickedStartTime!,
+            endTime: pickedEndTime!,
+            room: room,
+            type: pickedType!,
+          );
 
           if(widget.timeSlot == null) {
             await TimeSlotDatabaseHelper.add(timeSlot);
@@ -106,6 +122,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
             widget.timeSlot!.day = pickedDay!;
             widget.timeSlot!.startTime = pickedStartTime!;
             widget.timeSlot!.endTime = pickedEndTime!;
+            widget.timeSlot!.type = pickedType!;
 
             await TimeSlotDatabaseHelper.update(widget.timeSlot!);
           }
@@ -117,7 +134,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
               child: TextFormField(
                 controller: roomTextController,
                 maxLines: 1,
@@ -136,25 +153,51 @@ class _TimeSlotState extends State<TimeSlotScreen> {
                 ),
               ),
             ),
-            DropdownButton<WeekDays>(
-              value: pickedDay,
-              underline: const SizedBox.shrink(),
-              isExpanded: true,
-              items: weekDays.map((WeekDays weekDay) {
-                return DropdownMenuItem<WeekDays>(
-                  value: weekDay,
-                  child: Text(weekDaysToString(weekDay))
-                );
-              }).toList(),
-              onChanged: (newVal) => {
-                setState(() => {
-                  pickedDay = newVal!,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: DropdownButton<TimeSlotType>(
+                value: pickedType,
+                hint: const Text('Type'),
+                isExpanded: true,
+                items: types.map((TimeSlotType type) {
+                  return DropdownMenuItem<TimeSlotType>(
+                      value: type,
+                      child: Text(typeToString(type))
+                  );
+                }).toList(),
+                onChanged: (newVal) => {
+                  setState(() => {
+                    pickedType = newVal!,
 
-                  if(widget.timeSlot != null && pickedDay != null) {
-                    widget.timeSlot!.day = pickedDay!,
-                  }
-                }),
-              },
+                    if(widget.timeSlot != null && pickedType != null) {
+                      widget.timeSlot!.type = pickedType!,
+                    }
+                  }),
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: DropdownButton<WeekDays>(
+                value: pickedDay,
+                hint: const Text('Wochentag'),
+                isExpanded: true,
+                items: weekDays.map((WeekDays weekDay) {
+                  return DropdownMenuItem<WeekDays>(
+                    value: weekDay,
+                    child: Text(weekDaysToString(weekDay))
+                  );
+                }).toList(),
+                onChanged: (newVal) => {
+                  setState(() => {
+                    pickedDay = newVal!,
+
+                    if(widget.timeSlot != null && pickedDay != null) {
+                      widget.timeSlot!.day = pickedDay!,
+                    }
+                  }),
+                },
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -250,6 +293,21 @@ class _TimeSlotState extends State<TimeSlotScreen> {
         return 'Sonntag';
       default:
         return 'Fehler';
+    }
+  }
+
+  static String typeToString(TimeSlotType type) {
+    switch(type) {
+      case TimeSlotType.labor:
+        return 'Labor';
+      case TimeSlotType.lecture:
+        return 'Vorlesung';
+      case TimeSlotType.practice:
+        return 'Übung';
+      case TimeSlotType.tutorial:
+        return 'Tutorium';
+      default:
+        return 'Vorlesung';
     }
   }
 }

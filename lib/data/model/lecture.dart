@@ -5,14 +5,15 @@ import 'package:keep_on_track/data/model/time_slot.dart';
 class Lecture {
   int? id;
   String title;
+  String shorthand;
   String instructor;
   Color color;
   List<TimeSlot> timeSlots;
-  // TODO: Add field for short title
 
   Lecture({
     this.id,
     required this.title,
+    required this.shorthand,
     required this.instructor,
     required this.color,
     required this.timeSlots,
@@ -25,11 +26,12 @@ class Lecture {
     // TODO: Load time slots from db
 
     Lecture lecture = Lecture(
-        id: lectureID,
-        title: json['title'],
-        instructor: json['instructor'],
-        color: Color.fromARGB(json['colorA'], json['colorR'], json['colorG'], json['colorB']),
-        timeSlots: timeSlots,
+      id: lectureID,
+      title: json['title'],
+      shorthand: json['shorthand'],
+      instructor: json['instructor'],
+      color: Color.fromARGB(json['colorA'], json['colorR'], json['colorG'], json['colorB']),
+      timeSlots: timeSlots,
     );
 
     return lecture;
@@ -38,6 +40,7 @@ class Lecture {
   Map<String, dynamic> toJson() => {
     'id': id,
     'title': title,
+    'shorthand': shorthand,
     'instructor': instructor,
     'colorA': color.alpha,
     'colorR': color.red,
