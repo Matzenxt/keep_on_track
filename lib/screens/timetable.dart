@@ -38,8 +38,16 @@ class _TimeTableState extends State<TimeTable> {
     return CalendarControllerProvider(
         controller: eventController,
         child: MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.lightBlue,
+          ),
           scaffoldMessengerKey: snackbarKey,
           home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Stundenplan'),
+            actions: const <Widget>[
+            ],
+          ),
             body: WeekView<TimeTableEvent>(
               controller: eventController,
               eventTileBuilder: (date, events, boundary, start, end) {
