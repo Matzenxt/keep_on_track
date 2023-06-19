@@ -72,6 +72,20 @@ class _AppointmentState extends State<Appointment> {
               lastDay: DateTime.utc(2023, 8, 31),
               focusedDay: _focusedDay,
               eventLoader: _getEventsFromDay,
+              weekNumbersVisible: true,
+              calendarBuilders: CalendarBuilders(
+                singleMarkerBuilder: (context, date, event) {
+                  return Container(
+                    height: 5,
+                    width: 5,
+                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: getColor(event as CalenderEvent),
+                    ),
+                  );
+                }
+              ),
               selectedDayPredicate: (day) {
                 return isSameDay(_selectedDay, day);
               },
@@ -175,6 +189,28 @@ class _AppointmentState extends State<Appointment> {
     return Colors.grey;
   }
 
+  Color getColor(CalenderEvent event) {
+    switch(event.runtimeType) {
+      case Event:
+        // TODO: get color from Event
+        return Colors.green;
+      case TimeTableCalender:
+        TimeTableCalender timeTableCalender = event as TimeTableCalender;
+
+        return getLectureColor(timeTableCalender.timeSlot.lectureId);
+      case TodoEvent:
+        TodoEvent todoEvent = event as TodoEvent;
+
+        if(todoEvent.lectureID != null) {
+          return getLectureColor(todoEvent.lectureID!);
+        } else {
+         return Colors.grey;
+        }
+      default:
+        return Colors.grey;
+    }
+  }
+
   Future<List<Lecture>> loadLectures() async {
     List<Lecture>? lectures = await LectureDatabaseHelper.getAll();
 
@@ -183,6 +219,11 @@ class _AppointmentState extends State<Appointment> {
     } else {
       return [];
     }
+  }
+
+
+  Future<void> loadEvents() async {
+    // TODO: Add functionality
   }
 
   Future<void> loadTodos() async {
@@ -214,6 +255,7 @@ class _AppointmentState extends State<Appointment> {
     }
   }
 
+  // TODO: Load timeslots
   Future<void> loadTimeSlots() async {
     List<TimeSlot> times = await TimeSlotDatabaseHelper.getAll();
 
