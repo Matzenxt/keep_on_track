@@ -120,22 +120,31 @@ class _AppointmentState extends State<Appointment> {
 
               },
             ),
-            ..._getEventsFromDay(_selectedDay).map((CalenderEvent event) {
-             switch(event.runtimeType) {
-               case Event:
-                 return eventEntry(event as Event);
-               case TimeTableCalender:
-                 return timeSlotEntry(event as TimeTableCalender);
-               case TodoEvent:
-                 return todoEntry(event as TodoEvent);
-               default:
-                 return const Text('Fehler: Unbekanntes Event');
-             }
-            }),
+             Expanded(
+              child: ListView.builder(
+                itemCount: _getEventsFromDay(_selectedDay).length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return eventListEntry(_getEventsFromDay(_selectedDay)[index]);
+                  }
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Widget eventListEntry(CalenderEvent calenderEvent) {
+    switch(calenderEvent.runtimeType) {
+      case Event:
+        return eventEntry(calenderEvent as Event);
+      case TimeTableCalender:
+        return timeSlotEntry(calenderEvent as TimeTableCalender);
+      case TodoEvent:
+        return todoEntry(calenderEvent as TodoEvent);
+      default:
+        return const Text('Fehler: Unbekanntes Event');
+    }
   }
 
   Widget eventEntry(Event event) {
@@ -152,7 +161,6 @@ class _AppointmentState extends State<Appointment> {
 
   Widget todoEntry(TodoEvent todoEvent) {
     return ListTile(
-      //TODO: Load color
       leading: Icon(
         Icons.checklist,
         color: getLectureColor(todoEvent.lectureID),
