@@ -56,6 +56,8 @@ class _AppointmentState extends State<Appointment> {
               for(CalenderEvent event in events) {
                 value.add(event);
               }
+              value.sort((first, second) => first.startDate.isBefore(second.startDate) ? 0:1);
+
               return value;
             });
           } else {
