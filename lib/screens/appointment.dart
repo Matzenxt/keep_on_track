@@ -1,3 +1,4 @@
+import 'package:calendar_view/calendar_view.dart' hide HeaderStyle;
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/calender_event.dart';
 import 'package:keep_on_track/data/model/event.dart';
@@ -42,6 +43,12 @@ class _AppointmentState extends State<Appointment> {
     loadTodos().whenComplete(() => setState(() {
       if(todoEvents.isNotEmpty) {
         allEvents.addAll(todoEvents);
+      }
+    }));
+
+    loadTimeSlots().whenComplete(() => setState(() {
+      if(timeSlotEvents.isNotEmpty) {
+        allEvents.addAll(timeSlotEvents);
       }
     }));
   }
@@ -255,14 +262,58 @@ class _AppointmentState extends State<Appointment> {
     }
   }
 
-  // TODO: Load timeslots
   Future<void> loadTimeSlots() async {
     List<TimeSlot> times = await TimeSlotDatabaseHelper.getAll();
+    for(DateTime currentDate = semesterStart; currentDate.isBefore(semesterEnd); currentDate = currentDate.add(const Duration(days: 7))) {
 
-    for(DateTime currentDate = semesterStart; currentDate.isBefore(semesterEnd); currentDate.add(const Duration(days: 7))) {
-      for(TimeSlot time in times) {
+      for (TimeSlot time in times) {
+        DateTime date = currentDate.firstDayOfWeek().add(Duration(days: getDayOffset(time.day)));
+        List<CalenderEvent>? temp = timeSlotEvents[date];
 
+        DateTime startDateTime = DateTime(date.year, date.month, date.day, time.startTime.hour, time.startTime.minute);
+        DateTime endDateTime = DateTime(date.year, date.month, date.day, time.endTime.hour, time.endTime.minute);
+
+        Lecture? lecture = await LectureDatabaseHelper.getByID(time.lectureId);
+
+        if(lecture != null) {
+          TimeTableCalender event = TimeTableCalender(
+            timeSlot: time,
+            lecture: lecture,
+            startDate: startDateTime,
+            endDate: endDateTime,
+          );
+
+          if(temp != null) {
+            timeSlotEvents.update(date, (value) {
+              value.add(event);
+              return value;
+            });
+          } else {
+            timeSlotEvents[date] = [event];
+          }
+        }
       }
+    }
+  }
+
+  static int getDayOffset(WeekDays weekDay) {
+    switch(weekDay) {
+      case WeekDays.monday:
+        return 0;
+      case WeekDays.tuesday:
+        return 1;
+      case WeekDays.wednesday:
+        return 2;
+      case WeekDays.thursday:
+        return 3;
+      case WeekDays.friday:
+        return 4;
+      case WeekDays.saturday:
+        return 5;
+      case WeekDays.sunday:
+        return 6;
+      default:
+        return 0;
     }
   }
 }
