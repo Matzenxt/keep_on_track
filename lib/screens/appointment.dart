@@ -42,13 +42,27 @@ class _AppointmentState extends State<Appointment> {
     // TODO: Load all timeslots, todos and events
     loadTodos().whenComplete(() => setState(() {
       if(todoEvents.isNotEmpty) {
-        allEvents.addAll(todoEvents);
+        allEvents.addEntries(todoEvents.entries);
       }
     }));
 
     loadTimeSlots().whenComplete(() => setState(() {
       if(timeSlotEvents.isNotEmpty) {
-        allEvents.addAll(timeSlotEvents);
+        timeSlotEvents.forEach((key, events) {
+          List<CalenderEvent>? temp = allEvents[key];
+
+          if(temp != null) {
+            allEvents.update(DateTime(key.year, key.month, key.day), (value) {
+              for(CalenderEvent event in events) {
+                value.add(event);
+              }
+              return value;
+            });
+          } else {
+            allEvents[DateTime(key.year, key.month, key.day)] = events;
+          }
+
+        });
       }
     }));
   }
