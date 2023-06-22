@@ -21,8 +21,11 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  Lecture empty = Lecture(title: '---', shorthand: '---', instructor: '---', color: Colors.black12, timeSlots: []);
+  Lecture emptyLecture = Lecture(title: '---', shorthand: '---', instructor: '---', color: Colors.black12, timeSlots: []);
   Lecture? selectedLecture;
+
+  LearningTodo emptyLearningTodo = LearningTodo(done: false, title: '---', note: '---');
+  LearningTodo? selectedParentLearningTodo;
 
   @override
   void dispose() {
@@ -185,7 +188,9 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                   ],
                 ),
             ),
-            FutureBuilder<List<Lecture>>(
+
+            if(widget.learningTodo != null)
+              FutureBuilder<List<Lecture>>(
               future: _getAllLectures(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -197,10 +202,10 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                     if(result.isNotEmpty) {
                       selectedLecture = result.first;
                     } else {
-                      selectedLecture = empty;
+                      selectedLecture = emptyLecture;
                     }
                   } else {
-                    selectedLecture = empty;
+                    selectedLecture = emptyLecture;
                   }
 
                   return Container(
@@ -216,20 +221,20 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                         return DropdownMenuItem<Lecture>(
                           value: lecture,
                           child: Container(
-                            decoration: BoxDecoration(
-                              color: lecture.color,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            margin: const EdgeInsets.all(2),
-                            alignment: Alignment.center,
-                            child: Text(
-                              lecture.title,
-                              style: TextStyle(
-                                color: ThemeData.estimateBrightnessForColor(lecture.color) == Brightness.dark ?
+                              decoration: BoxDecoration(
+                                color: lecture.color,
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              margin: const EdgeInsets.all(2),
+                              alignment: Alignment.center,
+                              child: Text(
+                                lecture.title,
+                                style: TextStyle(
+                                  color: ThemeData.estimateBrightnessForColor(lecture.color) == Brightness.dark ?
                                   Colors.white :
                                   Colors.black,
-                              ),
-                            )
+                                ),
+                              )
                           ),
                         );
                       }).toList(),
@@ -239,13 +244,81 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                           selectedLecture = newVal!,
 
                           if(widget.learningTodo != null) {
-                            if (newVal!.title != '---')
+                            if (newVal.title != '---')
                               {
                                 widget.learningTodo!.lectureID = selectedLecture!.id,
                               }
                             else
                               {
                                 widget.learningTodo!.lectureID = null,
+                              }
+                          }
+                        })
+                      },
+                    ),
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
+            ),
+
+            if(widget.learningTodo != null)
+              FutureBuilder<List<LearningTodo>>(
+              future: _getAllLearningTodos(widget.learningTodo!.id!),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var data = snapshot.data!;
+
+                  if(widget.learningTodo != null && widget.learningTodo!.parentId != null) {
+                    data.removeWhere((element) => element.id == widget.learningTodo!.id);
+                    var result = data.where((element) => element.id == widget.learningTodo!.parentId!);
+
+                    if(result.isNotEmpty) {
+                      selectedParentLearningTodo = result.first;
+                    } else {
+                      selectedParentLearningTodo = emptyLearningTodo;
+                    }
+                  } else {
+                    selectedParentLearningTodo = emptyLearningTodo;
+                  }
+
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: DropdownButton(
+                      value: selectedParentLearningTodo,
+                      underline: const SizedBox.shrink(),
+                      isExpanded: true,
+                      items: data.map((LearningTodo learningTodo) {
+                        return DropdownMenuItem<LearningTodo>(
+                          value: learningTodo,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              margin: const EdgeInsets.all(2),
+                              alignment: Alignment.center,
+                              child: Text(
+                                learningTodo.title,
+                              )
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (newVal) =>
+                      {
+                        setState(() => {
+                          selectedParentLearningTodo = newVal!,
+
+                          if(widget.learningTodo != null) {
+                            if (selectedParentLearningTodo!.title != '---')
+                              {
+                                widget.learningTodo!.parentId = selectedParentLearningTodo!.id,
+                              }
+                            else
+                              {
+                                widget.learningTodo!.parentId = null,
                               }
                           }
                         })
@@ -297,12 +370,26 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
     List<Lecture> lectures = [];
     List<Lecture>? temp = await LectureDatabaseHelper.getAll();
 
-    lectures.add(empty);
+    lectures.add(emptyLecture);
 
     if(temp != null) {
       lectures.addAll(temp);
     }
 
     return lectures;
+  }
+
+  Future<List<LearningTodo>> _getAllLearningTodos(int currentLearningId) async {
+    List<LearningTodo> learningTodos = [];
+    List<LearningTodo>? temp = await LearningTodoDatabaseHelper.getAll();
+
+    learningTodos.add(emptyLearningTodo);
+
+    if(temp != null) {
+      learningTodos.addAll(temp);
+      learningTodos.removeWhere((element) => element.id == currentLearningId);
+    }
+
+    return learningTodos;
   }
 }
