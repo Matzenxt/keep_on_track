@@ -1,6 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:keep_on_track/data/model/Notification.dart';
+import 'package:keep_on_track/data/model/learning_todo.dart';
 import 'package:keep_on_track/data/model/todo.dart';
+import 'package:keep_on_track/services/database/learning_todo.dart';
 import 'package:keep_on_track/services/database/notification.dart';
 import 'package:keep_on_track/services/database/todo.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -46,12 +48,27 @@ class NotificationService {
     );
   }
 
+  // TODO: Add learning todo
+
   notificationDetailsTodo() {
     return const NotificationDetails(
         android: AndroidNotificationDetails(
           '2',
           'Todos',
           channelDescription: 'Benachrichtigungen für Todo\'s',
+          importance: Importance.max,
+          playSound: false,
+        ),
+        iOS: DarwinNotificationDetails()
+    );
+  }
+
+  notificationDetailsLearningTodo() {
+    return const NotificationDetails(
+        android: AndroidNotificationDetails(
+          '3',
+          'Lernpunkte',
+          channelDescription: 'Benachrichtigungen für Lernpunkt',
           importance: Importance.max,
           playSound: false,
         ),
@@ -101,6 +118,47 @@ class NotificationService {
       }
 
       await TodoDatabaseHelper.removeNotificationID(todo);
+    }
+  }
+
+  Future<void> updateNotificationLearningTodo(LearningTodo learningTodo) async {
+    await cancelLearningTodoNotification(learningTodo);
+    await scheduleNotificationLearningTodo(learningTodo);
+  }
+
+  Future<Tuple2<bool, String>> scheduleNotificationLearningTodo(LearningTodo learningTodo) async {
+    if(learningTodo.alertDate != null && !learningTodo.alertDate!.difference(DateTime.now()).isNegative) {
+      Notification notification = Notification(notificationFor: NotificationFor.todo, alarmDateTime: learningTodo.alertDate!);
+      int ret = await NotificationDatabaseHelper.add(notification);
+
+      learningTodo.notificationID = ret;
+      LearningTodoDatabaseHelper.addNotificationID(learningTodo);
+
+      scheduledNotification(
+          id: learningTodo.notificationID!,
+          title: 'Todo: ${learningTodo.title}',
+          body: 'Notiz: ${learningTodo.note}',
+          alarmDate: learningTodo.alertDate!,
+          notificationDetails: NotificationService().notificationDetailsTodo()
+      );
+
+      return const Tuple2(true, 'Benachrichtigung erfolgreich hinzugefügt.');
+    } else {
+      return const Tuple2(false, 'Fehler beim Benachrichtigung hinzufügen. Datum liegt in der Vergangenheit!');
+    }
+  }
+
+  Future<void> cancelLearningTodoNotification(LearningTodo learningTodo) async {
+    if(learningTodo.notificationID != null) {
+      await flutterLocalNotificationsPlugin.cancel(learningTodo.notificationID!);
+
+      final notification = await NotificationDatabaseHelper.getByID(learningTodo.notificationID!);
+
+      if(notification != null) {
+        await NotificationDatabaseHelper.delete(notification);
+      }
+
+      await LearningTodoDatabaseHelper.removeNotificationID(learningTodo);
     }
   }
 

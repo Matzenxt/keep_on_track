@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:keep_on_track/components/drawer.dart';
 import 'package:keep_on_track/screens/appointment.dart';
-import 'package:keep_on_track/screens/learning_material.dart';
+import 'package:keep_on_track/screens/learning_todo/learning_todos.dart';
 import 'package:keep_on_track/screens/lecture/lectures.dart';
 import 'package:keep_on_track/screens/timetable.dart';
 import 'package:keep_on_track/screens/todo/todos.dart';
@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed:  () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const LearningMaterial()),
+                      MaterialPageRoute(builder: (context) => const LearningTodos()),
                     );
                   },
                   child: const Text("Lernstoff")
