@@ -48,8 +48,6 @@ class NotificationService {
     );
   }
 
-  // TODO: Add learning todo
-
   notificationDetailsTodo() {
     return const NotificationDetails(
         android: AndroidNotificationDetails(
