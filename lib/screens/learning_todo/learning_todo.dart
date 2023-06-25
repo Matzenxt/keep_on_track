@@ -110,6 +110,7 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
             widget.learningTodo?.note = description;
             widget.learningTodo?.alertDate = dateTime;
 
+            model.parentId = widget.learningTodo!.parentId;
             model.notificationID = widget.learningTodo?.notificationID;
             model.done = widget.learningTodo!.done;
             await LearningTodoDatabaseHelper.update(model);
