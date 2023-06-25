@@ -34,7 +34,7 @@ class _LearningTodosState extends State<LearningTodos> {
       ),
       drawer: const CustomDrawer(),
       body: FutureBuilder<List<LearningTodo>?>(
-        future: LearningTodoDatabaseHelper.getAll(),
+        future: _getParentLearningTodos(),
         builder: (context, AsyncSnapshot<List<LearningTodo>?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
@@ -69,5 +69,21 @@ class _LearningTodosState extends State<LearningTodos> {
         },
       ),
     );
+  }
+
+  Future<List<LearningTodo>?> _getParentLearningTodos() async {
+    List<LearningTodo> learnings = [];
+
+    var values = await LearningTodoDatabaseHelper.getAll();
+
+    if (values != null) {
+      for(LearningTodo todo in values) {
+        if(todo.parentId == null) {
+          learnings.add(todo);
+        }
+      }
+    }
+
+    return learnings;
   }
 }
