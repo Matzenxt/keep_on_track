@@ -7,6 +7,16 @@ import 'package:keep_on_track/services/database/lecture.dart';
 import 'package:keep_on_track/services/notification_service.dart';
 import 'package:tuple/tuple.dart';
 
+class Item {
+  LearningTodo todo;
+  bool isExpanded;
+
+  Item({
+    required this.todo,
+    this.isExpanded = false,
+  });
+}
+
 class LearningTodoRow extends StatefulWidget {
   final Function deleteLearningTodo;
 
@@ -151,23 +161,42 @@ class _LearningTodoRowState extends State<LearningTodoRow> {
                     ],
                   ),
                 ),
-                ExpansionPanelList(
-                  expansionCallback: (int index, bool isExpanded) {},
-                  children: [
-                    ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return ListTile(
-                          title: Text('asdf'),
-                        );
-                      },
-                      body: ListTile(
-                        title: Text('Body title'),
-                        subtitle: Text('body sub'),
-                      ),
-                      isExpanded: true,
-                    ),
-                  ],
-                )
+                FutureBuilder<List<Item>>(
+                  future: _getChildLearningTodos(widget.learningTodo.id!),
+                  builder: (BuildContext ctx, AsyncSnapshot<List<Item>> snap) {
+                    if(snap.hasData) {
+                      List<Item> items = snap.data!;
+
+                      return ExpansionPanelList(
+                        expansionCallback: (int index, bool isExpanded) {
+                          setState(() {
+                            items[index].isExpanded = !isExpanded;
+                          });
+                        },
+                        children: items.map<ExpansionPanel>((Item item) {
+                          return ExpansionPanel(
+                            headerBuilder: (BuildContext context, bool isExpanded) {
+                              return ListTile(
+                                title: Text(item.todo.title),
+                              );
+                            },
+                            body: ListTile(
+                                title: Text(item.todo.note),
+                                subtitle:
+                                const Text('To delete this panel, tap the trash can icon'),
+                                trailing: const Icon(Icons.delete),
+                            ),
+                            isExpanded: item.isExpanded,
+                          );
+                        }).toList(),
+                      );
+                    } else if (snap.hasError) {
+                      return Text('Fehler');
+                    } else {
+                      return Text('Es gibt noch keine Untertodos');
+                    }
+                  }
+                ),
               ],
             ),
           );
@@ -194,5 +223,18 @@ class _LearningTodoRowState extends State<LearningTodoRow> {
     return ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ?
     Colors.white :
     Colors.black;
+  }
+
+  Future<List<Item>> _getChildLearningTodos(int parentId) async {
+    List<Item> learnings = [];
+    List<LearningTodo>? values = await LearningTodoDatabaseHelper.getByParentLearningTodo(parentId);
+
+    if(values != null) {
+      for(LearningTodo value in values) {
+        learnings.add(Item(todo: value));
+      }
+    }
+
+    return learnings;
   }
 }
