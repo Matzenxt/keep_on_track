@@ -69,7 +69,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text("Zeit Slot löschen"),
-                    content: const Text("Magst du wirklich Zeit Slot löschen?"),
+                    content: const Text("Magst du wirklich diesen Zeit Slot löschen?"),
                     actions: [
                       TextButton(
                         onPressed: () {

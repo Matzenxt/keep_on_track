@@ -59,7 +59,7 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text("Lernpunkt löschen"),
-                      content: const Text("Magst du wirklich den Lernpunkt löschen?"),
+                      content: const Text("Magst du wirklich diesen Lernpunkt und alle Unterpunkte löschen?"),
                       actions: [
                         TextButton(
                             onPressed: () {
