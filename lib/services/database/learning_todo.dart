@@ -53,6 +53,14 @@ class LearningTodoDatabaseHelper {
       await NotificationService().cancelLearningTodoNotification(learningTodo);
     }
 
+    final List<LearningTodo>? learnings = await getByParentLearningTodo(learningTodo.id!);
+
+    if(learnings != null) {
+      for(LearningTodo todo in learnings) {
+        delete(todo);
+      }
+    }
+
     return await db.delete(
       tableName,
       where: 'id = ?',
