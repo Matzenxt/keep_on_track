@@ -137,7 +137,7 @@ class NotificationService {
           title: 'Todo: ${learningTodo.title}',
           body: 'Notiz: ${learningTodo.note}',
           alarmDate: learningTodo.alertDate!,
-          notificationDetails: NotificationService().notificationDetailsTodo()
+          notificationDetails: NotificationService().notificationDetailsLearningTodo()
       );
 
       return const Tuple2(true, 'Benachrichtigung erfolgreich hinzugefügt.');
