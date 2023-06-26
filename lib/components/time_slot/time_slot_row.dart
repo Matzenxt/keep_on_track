@@ -25,7 +25,7 @@ class _TimeSlotState extends State<TimeSlotRow> {
             children: [
               Row(
                 children: [
-                  Text('Typ: ${widget.timeSlot!.typeToString()}'),
+                  Text('Typ: ${widget.timeSlot.typeToString()}'),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
                     child: Text('Tag: ${widget.timeSlot.dayToText()}'),
@@ -55,7 +55,7 @@ class _TimeSlotState extends State<TimeSlotRow> {
           onPressed: () async => await Navigator.push(context, MaterialPageRoute(builder: (context) =>
               TimeSlotScreen(
                 timeSlot: widget.timeSlot,
-                lecture: widget.lecture!,
+                lecture: widget.lecture,
                 deleteTimeSlot: () => {
                   // TODO: Add delete functionality
                 }

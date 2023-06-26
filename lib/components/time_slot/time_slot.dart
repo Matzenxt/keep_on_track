@@ -207,7 +207,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
                   pickedStartTime = startTime;
 
                   if(widget.timeSlot != null && startTime != null) {
-                    widget.timeSlot!.startTime = startTime!;
+                    widget.timeSlot!.startTime = startTime;
                   }
                 });
               },
@@ -233,7 +233,7 @@ class _TimeSlotState extends State<TimeSlotScreen> {
                   pickedEndTime = endTime;
 
                   if(widget.timeSlot != null && endTime != null) {
-                    widget.timeSlot!.endTime = endTime!;
+                    widget.timeSlot!.endTime = endTime;
                   }
                 });
               },

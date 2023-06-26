@@ -175,7 +175,7 @@ class _AppointmentState extends State<Appointment> {
   Widget eventEntry(Event event) {
     return ListTile(
       // TODO: Load color?
-      leading: Icon(
+      leading: const Icon(
         Icons.event,
         color: Colors.red,
       ),

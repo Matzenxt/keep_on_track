@@ -50,7 +50,7 @@ class Lecture {
 
   @override
   bool operator ==(dynamic other) =>
-      other != null && other is Lecture && this.id == other.id;
+      other != null && other is Lecture && id == other.id;
 
   @override
   int get hashCode => super.hashCode;

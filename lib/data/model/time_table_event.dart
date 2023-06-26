@@ -19,7 +19,10 @@ class TimeTableEvent {
 }
 
 class TimeTableCalender extends TimeTableEvent implements CalenderEvent {
+  @override
   DateTime startDate;
+
+  @override
   DateTime endDate;
 
   TimeTableCalender({

@@ -239,7 +239,7 @@ class _TodoScreenState extends State<TodoScreen> {
                           selectedLecture = newVal!,
 
                           if(widget.todo != null) {
-                            if (newVal!.title != '---')
+                            if (newVal.title != '---')
                               {
                                 widget.todo!.lectureID = selectedLecture!.id,
                               }
