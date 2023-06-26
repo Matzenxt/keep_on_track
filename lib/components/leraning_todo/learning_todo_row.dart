@@ -212,6 +212,7 @@ class _LearningTodoRowListState extends State<LearningTodoRowList> {
                   children: widget.items.map<ExpansionPanel>((Item item) {
                     return ExpansionPanel(
                       headerBuilder: (BuildContext context, bool isExpanded) {
+                        // TODO: Sum up sub todos and display progress.
                         return ListTile(
                           title: Text(item.todo.title),
                         );
