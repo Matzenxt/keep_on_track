@@ -202,7 +202,7 @@ class _AppointmentState extends State<Appointment> {
       subtitle: Text(
           '${timeTableEvent.timeSlot.startTime.hour.toString().padLeft(2, '0')}:${timeTableEvent.timeSlot.startTime.minute.toString().padLeft(2, '0')} - '
           '${timeTableEvent.timeSlot.endTime.hour.toString().padLeft(2, '0')}:${timeTableEvent.timeSlot.endTime.minute.toString().padLeft(2, '0')}'
-          ', Raum: ${timeTableEvent.timeSlot.room}'
+          ', Raum: ${timeTableEvent.timeSlot.room}, ${timeTableEvent.timeSlot.typeToString()}'
         ),
     );
   }

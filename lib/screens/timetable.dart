@@ -8,8 +8,7 @@ import 'package:keep_on_track/services/database/time_slot.dart';
 
 import '../data/model/lecture.dart';
 
-final GlobalKey<ScaffoldMessengerState> snackbarKey =
-GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> snackbarKey = GlobalKey<ScaffoldMessengerState>();
 
 class TimeTable extends StatefulWidget {
   const TimeTable({super.key});
