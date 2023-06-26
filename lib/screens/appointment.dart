@@ -2,11 +2,13 @@ import 'package:calendar_view/calendar_view.dart' hide HeaderStyle;
 import 'package:flutter/material.dart';
 import 'package:keep_on_track/data/model/calender_event.dart';
 import 'package:keep_on_track/data/model/event.dart';
+import 'package:keep_on_track/data/model/learning_todo.dart';
 import 'package:keep_on_track/data/model/lecture.dart';
 import 'package:keep_on_track/data/model/time_slot.dart';
 import 'package:keep_on_track/data/model/time_table_event.dart';
 import 'package:keep_on_track/data/model/todo.dart';
 import 'package:keep_on_track/main.dart';
+import 'package:keep_on_track/services/database/learning_todo.dart';
 import 'package:keep_on_track/services/database/lecture.dart';
 import 'package:keep_on_track/services/database/time_slot.dart';
 import 'package:keep_on_track/services/database/todo.dart';
@@ -30,6 +32,7 @@ class _AppointmentState extends State<Appointment> {
   Map<DateTime, List<CalenderEvent>> allEvents = {};
 
   Map<DateTime, List<CalenderEvent>> todoEvents = {};
+  Map<DateTime, List<CalenderEvent>> learningTodoEvents = {};
   Map<DateTime, List<CalenderEvent>> timeSlotEvents = {};
   Map<DateTime, List<CalenderEvent>> appointmentEvents = {};
 
@@ -43,6 +46,28 @@ class _AppointmentState extends State<Appointment> {
     loadTodos().whenComplete(() => setState(() {
       if(todoEvents.isNotEmpty) {
         allEvents.addEntries(todoEvents.entries);
+      }
+    }));
+
+    loadLearningTodos().whenComplete(() => setState(() {
+      if(learningTodoEvents.isNotEmpty) {
+        learningTodoEvents.forEach((key, events) {
+          List<CalenderEvent>? temp = allEvents[key];
+
+          if(temp != null) {
+            allEvents.update(DateTime(key.year, key.month, key.day), (value) {
+              for(CalenderEvent event in events) {
+                value.add(event);
+              }
+              value.sort((first, second) => first.startDate.isBefore(second.startDate) ? 0:1);
+
+              return value;
+            });
+          } else {
+            allEvents[DateTime(key.year, key.month, key.day)] = events;
+          }
+
+        });
       }
     }));
 
@@ -314,6 +339,35 @@ class _AppointmentState extends State<Appointment> {
             });
           } else {
             timeSlotEvents[date] = [event];
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> loadLearningTodos() async {
+    List<LearningTodo>? todos = await LearningTodoDatabaseHelper.getAll();
+
+    if(todos != null) {
+      for(LearningTodo todo in todos) {
+        if(todo.alertDate != null) {
+          List<CalenderEvent>? temp = learningTodoEvents[DateTime(todo.alertDate!.year, todo.alertDate!.month, todo.alertDate!.day)];
+
+          TodoEvent event = TodoEvent(
+            done: todo.done,
+            title: todo.title,
+            note: todo.note,
+            alertDate: todo.alertDate,
+            lectureID: todo.lectureID,
+          );
+
+          if(temp != null) {
+            learningTodoEvents.update(DateTime(todo.alertDate!.year, todo.alertDate!.month, todo.alertDate!.day), (value) {
+              value.add(event);
+              return value;
+            });
+          } else {
+            learningTodoEvents[DateTime(todo.alertDate!.year, todo.alertDate!.month, todo.alertDate!.day)] = [event];
           }
         }
       }
