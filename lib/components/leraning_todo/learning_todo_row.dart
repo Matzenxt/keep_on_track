@@ -17,18 +17,60 @@ class Item {
   });
 }
 
-class LearningTodoRow extends StatefulWidget {
+class LearningTodoRow extends StatelessWidget {
   final Function deleteLearningTodo;
-
   final LearningTodo learningTodo;
 
-  const LearningTodoRow({super.key, required this.learningTodo, required this.deleteLearningTodo});
+  const LearningTodoRow({Key? key, required this.learningTodo, required this.deleteLearningTodo}) : super(key: key);
 
   @override
-  State<LearningTodoRow> createState() => _LearningTodoRowState();
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Item>>(
+      future: _getChildLearningTodos(learningTodo.id!),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          List<Item> data = snapshot.data;
+          return Column(
+            children: [
+              LearningTodoRowList(items: data, deleteLearningTodo: deleteLearningTodo, learningTodo: learningTodo),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+
+  Future<List<Item>> _getChildLearningTodos(int parentId) async {
+    List<Item> learnings = [];
+
+    List<LearningTodo>? values = await LearningTodoDatabaseHelper
+        .getByParentLearningTodo(parentId);
+
+    if (values != null) {
+      for (LearningTodo value in values) {
+        learnings.add(Item(todo: value));
+      }
+    }
+
+    return learnings;
+  }
 }
 
-class _LearningTodoRowState extends State<LearningTodoRow> {
+class LearningTodoRowList extends StatefulWidget {
+  final Function deleteLearningTodo;
+  final LearningTodo learningTodo;
+  final List<Item> items;
+
+  const LearningTodoRowList({super.key, required this.learningTodo, required this.deleteLearningTodo, required this.items});
+
+  @override
+  State<LearningTodoRowList> createState() => _LearningTodoRowListState();
+}
+
+class _LearningTodoRowListState extends State<LearningTodoRowList> {
   Color backgroundColor = Colors.black12;
 
   @override
@@ -161,41 +203,25 @@ class _LearningTodoRowState extends State<LearningTodoRow> {
                     ],
                   ),
                 ),
-                FutureBuilder<List<Item>>(
-                  future: _getChildLearningTodos(widget.learningTodo.id!),
-                  builder: (BuildContext ctx, AsyncSnapshot<List<Item>> snap) {
-                    if(snap.hasData) {
-                      List<Item> items = snap.data!;
-
-                      return ExpansionPanelList(
-                        expansionCallback: (int index, bool isExpanded) {
-                          setState(() {
-                            items[index].isExpanded = !isExpanded;
-                          });
-                        },
-                        children: items.map<ExpansionPanel>((Item item) {
-                          return ExpansionPanel(
-                            headerBuilder: (BuildContext context, bool isExpanded) {
-                              return ListTile(
-                                title: Text(item.todo.title),
-                              );
-                            },
-                            body: ListTile(
-                                title: Text(item.todo.note),
-                                subtitle:
-                                const Text('To delete this panel, tap the trash can icon'),
-                                trailing: const Icon(Icons.delete),
-                            ),
-                            isExpanded: item.isExpanded,
-                          );
-                        }).toList(),
-                      );
-                    } else if (snap.hasError) {
-                      return Text('Fehler');
-                    } else {
-                      return Text('Es gibt noch keine Untertodos');
-                    }
-                  }
+                ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {
+                    setState(() {
+                      widget.items[index].isExpanded = !isExpanded;
+                    });
+                  },
+                  children: widget.items.map<ExpansionPanel>((Item item) {
+                    return ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          title: Text(item.todo.title),
+                        );
+                      },
+                      body: ListTile(
+                        title: Text(item.todo.note),
+                      ),
+                      isExpanded: item.isExpanded,
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -223,18 +249,5 @@ class _LearningTodoRowState extends State<LearningTodoRow> {
     return ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ?
     Colors.white :
     Colors.black;
-  }
-
-  Future<List<Item>> _getChildLearningTodos(int parentId) async {
-    List<Item> learnings = [];
-    List<LearningTodo>? values = await LearningTodoDatabaseHelper.getByParentLearningTodo(parentId);
-
-    if(values != null) {
-      for(LearningTodo value in values) {
-        learnings.add(Item(todo: value));
-      }
-    }
-
-    return learnings;
   }
 }
