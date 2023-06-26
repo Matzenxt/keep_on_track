@@ -216,9 +216,7 @@ class _LearningTodoRowListState extends State<LearningTodoRowList> {
                           title: Text(item.todo.title),
                         );
                       },
-                      body: ListTile(
-                        title: Text(item.todo.note),
-                      ),
+                      body: LearningTodoRow(learningTodo: item.todo, deleteLearningTodo: widget.deleteLearningTodo),
                       isExpanded: item.isExpanded,
                     );
                   }).toList(),
