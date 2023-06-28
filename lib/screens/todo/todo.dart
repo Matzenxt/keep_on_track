@@ -22,7 +22,7 @@ class _TodoScreenState extends State<TodoScreen> {
   final descriptionController = TextEditingController();
 
   Lecture empty = Lecture(title: '---', shorthand: '---', instructor: '---', color: Colors.black12, timeSlots: []);
-  Lecture? selectedLecture;
+  Lecture? selectedLecture = Lecture(title: '---', shorthand: '---', instructor: '---', color: Colors.black12, timeSlots: []);
 
   @override
   void dispose() {
@@ -94,7 +94,7 @@ class _TodoScreenState extends State<TodoScreen> {
 
           Navigator.pop(context);
 
-          final ToDo model = ToDo(id: widget.todo?.id, done: false, title: title, note: description, alertDate: dateTime, lectureID: null);
+          ToDo model = ToDo(id: widget.todo?.id, done: false, title: title, note: description, alertDate: dateTime, lectureID: null);
 
           if(selectedLecture != null && selectedLecture!.title != '---') {
             model.lectureID = selectedLecture!.id;
@@ -199,8 +199,6 @@ class _TodoScreenState extends State<TodoScreen> {
                     } else {
                       selectedLecture = empty;
                     }
-                  } else {
-                    selectedLecture = empty;
                   }
 
                   return Container(

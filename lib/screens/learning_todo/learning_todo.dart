@@ -22,7 +22,7 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
   final descriptionController = TextEditingController();
 
   Lecture emptyLecture = Lecture(title: '---', shorthand: '---', instructor: '---', color: Colors.black12, timeSlots: []);
-  Lecture? selectedLecture;
+  Lecture? selectedLecture = Lecture(title: '---', shorthand: '---', instructor: '---', color: Colors.black12, timeSlots: []);
 
   LearningTodo emptyLearningTodo = LearningTodo(done: false, title: '---', note: '---');
   LearningTodo? selectedParentLearningTodo;
@@ -101,6 +101,10 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
 
           if(selectedLecture != null && selectedLecture!.title != '---') {
             model.lectureID = selectedLecture!.id;
+          }
+
+          if(selectedParentLearningTodo != null && selectedParentLearningTodo!.title != '---') {
+            model.parentId = selectedParentLearningTodo!.id!;
           }
 
           if(widget.learningTodo == null) {
@@ -190,7 +194,6 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                 ),
             ),
 
-            if(widget.learningTodo != null)
               FutureBuilder<List<Lecture>>(
               future: _getAllLectures(),
               builder: (context, snapshot) {
@@ -205,8 +208,6 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                     } else {
                       selectedLecture = emptyLecture;
                     }
-                  } else {
-                    selectedLecture = emptyLecture;
                   }
 
                   return Container(
@@ -264,9 +265,8 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
               },
             ),
 
-            if(widget.learningTodo != null)
               FutureBuilder<List<LearningTodo>>(
-              future: _getAllLearningTodos(widget.learningTodo!.id!),
+              future: _getAllLearningTodos(widget.learningTodo?.id),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var data = snapshot.data!;
@@ -380,7 +380,7 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
     return lectures;
   }
 
-  Future<List<LearningTodo>> _getAllLearningTodos(int currentLearningId) async {
+  Future<List<LearningTodo>> _getAllLearningTodos(int? currentLearningId) async {
     List<LearningTodo> learningTodos = [];
     List<LearningTodo>? temp = await LearningTodoDatabaseHelper.getAll();
 
@@ -388,7 +388,10 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
 
     if(temp != null) {
       learningTodos.addAll(temp);
-      learningTodos.removeWhere((element) => element.id == currentLearningId);
+
+      if(currentLearningId != null) {
+        learningTodos.removeWhere((element) => element.id == currentLearningId);
+      }
     }
 
     return learningTodos;
