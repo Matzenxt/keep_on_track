@@ -72,7 +72,10 @@ class TodoDatabaseHelper {
   static Future<List<ToDo>?> getAllTodos() async {
     final db = await DatabaseHelper.getDB();
 
-    final List<Map<String, dynamic>> maps = await db.query("Todo");
+    final List<Map<String, dynamic>> maps = await db.query(
+        tableName,
+      orderBy: 'alertDate ASC'
+    );
 
     if (maps.isEmpty) {
       return null;
