@@ -52,7 +52,7 @@ class _TodoRowState extends State<TodoRow> {
                     },
                   ),
                   IconButton(
-                    icon: widget.todo.notificationID != null ? const Icon(Icons.alarm) : const Icon(Icons.alarm_off),
+                    icon: widget.todo.notificationID != null && widget.todo.alertDate != null && widget.todo.alertDate!.isAfter(DateTime.now()) ? const Icon(Icons.alarm) : const Icon(Icons.alarm_off),
                     color: ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ?
                     Colors.white :
                     Colors.black,

@@ -106,7 +106,7 @@ class _LearningTodoRowListState extends State<LearningTodoRowList> {
                         },
                       ),
                       IconButton(
-                        icon: widget.learningTodo.notificationID != null ? const Icon(Icons.alarm) : const Icon(Icons.alarm_off),
+                        icon: widget.learningTodo.notificationID != null && widget.learningTodo.alertDate != null && widget.learningTodo.alertDate!.isAfter(DateTime.now()) ? const Icon(Icons.alarm) : const Icon(Icons.alarm_off),
                         color: ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ?
                         Colors.white :
                         Colors.black,

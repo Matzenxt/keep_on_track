@@ -181,7 +181,7 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
                 },
                 child: Row(
                   children: [
-                    const Icon(Icons.access_time_rounded),
+                    Icon(dateTime == null ? Icons.alarm_add : dateTime!.isBefore(DateTime.now()) ? Icons.alarm_off : Icons.alarm),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text('Erinnern am:'),
