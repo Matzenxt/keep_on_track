@@ -178,9 +178,27 @@ class _TodoScreenState extends State<TodoScreen> {
                       padding: EdgeInsets.all(8.0),
                       child: Text('Erinnern am:'),
                     ),
-                    Text(dateTime == null ?
-                    'Bitte Zeit auswählen' :
-                    '${dateTime!.day}-${dateTime!.month}-${dateTime!.year} - ${dateTime!.hour.toString().padLeft(2, '0')}:${dateTime!.minute.toString().padLeft(2, '0')}'
+                    Expanded(
+                      child: Text(dateTime == null ?
+                      'Bitte Zeit auswählen' :
+                      '${dateTime!.day}-${dateTime!.month}-${dateTime!.year} - ${dateTime!.hour.toString().padLeft(2, '0')}:${dateTime!.minute.toString().padLeft(2, '0')}'
+                      ),
+                    ),
+                    if (dateTime != null)
+                    IconButton(
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        setState(() {
+                          dateTime = null;
+
+                          if(widget.todo != null) {
+                            widget.todo!.title = titleController.value.text;
+                            widget.todo!.note = descriptionController.value.text;
+                            widget.todo!.alertDate = null;
+                          }
+                        });
+                      },
+                      icon: const Icon(Icons.delete)
                     ),
                   ],
                 ),

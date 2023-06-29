@@ -166,171 +166,187 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
               maxLines: 5,
             ),
             ElevatedButton(
-                onPressed: () async {
-                  final date = await pickDateTime();
+              onPressed: () async {
+                final date = await pickDateTime();
 
-                  setState(() {
-                    dateTime = date;
+                setState(() {
+                  dateTime = date;
 
-                    if(widget.learningTodo != null) {
-                      widget.learningTodo!.title = titleController.value.text;
-                      widget.learningTodo!.note = descriptionController.value.text;
-                      widget.learningTodo!.alertDate = date;
-                    }
-                  });
-                },
-                child: Row(
-                  children: [
-                    Icon(dateTime == null ? Icons.alarm_add : dateTime!.isBefore(DateTime.now()) ? Icons.alarm_off : Icons.alarm),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Erinnern am:'),
-                    ),
-                    Text(dateTime == null ?
+                  if(widget.learningTodo != null) {
+                    widget.learningTodo!.title = titleController.value.text;
+                    widget.learningTodo!.note = descriptionController.value.text;
+                    widget.learningTodo!.alertDate = date;
+                  }
+                });
+              },
+              child: Row(
+                children: [
+                  Icon(dateTime == null ? Icons.alarm_add : dateTime!.isBefore(DateTime.now()) ? Icons.alarm_off : Icons.alarm),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Erinnern am:'),
+                  ),
+                  Expanded(
+                    child: Text(dateTime == null ?
                     'Bitte Zeit auswählen' :
                     '${dateTime!.day}-${dateTime!.month}-${dateTime!.year} - ${dateTime!.hour.toString().padLeft(2, '0')}:${dateTime!.minute.toString().padLeft(2, '0')}'
                     ),
-                  ],
-                ),
-            ),
-
-              FutureBuilder<List<Lecture>>(
-              future: _getAllLectures(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var data = snapshot.data!;
-
-                  if(widget.learningTodo != null && widget.learningTodo!.lectureID != null) {
-                    var result = data.where((element) => element.id == widget.learningTodo!.lectureID!);
-
-                    if(result.isNotEmpty) {
-                      selectedLecture = result.first;
-                    } else {
-                      selectedLecture = emptyLecture;
-                    }
-                  }
-
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: selectedLecture?.color,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: DropdownButton(
-                      value: selectedLecture,
-                      underline: const SizedBox.shrink(),
-                      isExpanded: true,
-                      items: data.map((Lecture lecture) {
-                        return DropdownMenuItem<Lecture>(
-                          value: lecture,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: lecture.color,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              margin: const EdgeInsets.all(2),
-                              alignment: Alignment.center,
-                              child: Text(
-                                lecture.title,
-                                style: TextStyle(
-                                  color: ThemeData.estimateBrightnessForColor(lecture.color) == Brightness.dark ?
-                                  Colors.white :
-                                  Colors.black,
-                                ),
-                              )
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (newVal) =>
-                      {
-                        setState(() => {
-                          selectedLecture = newVal!,
+                  ),
+                  if (dateTime != null)
+                    IconButton(
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        setState(() {
+                          dateTime = null;
 
                           if(widget.learningTodo != null) {
-                            if (newVal.title != '---')
-                              {
-                                widget.learningTodo!.lectureID = selectedLecture!.id,
-                              }
-                            else
-                              {
-                                widget.learningTodo!.lectureID = null,
-                              }
+                            widget.learningTodo!.title = titleController.value.text;
+                            widget.learningTodo!.note = descriptionController.value.text;
+                            widget.learningTodo!.alertDate = null;
                           }
-                        })
+                        });
                       },
+                      icon: const Icon(Icons.delete)
                     ),
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
+                ],
+              ),
             ),
+            FutureBuilder<List<Lecture>>(
+            future: _getAllLectures(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                var data = snapshot.data!;
 
-              FutureBuilder<List<LearningTodo>>(
-              future: _getAllLearningTodos(widget.learningTodo?.id),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var data = snapshot.data!;
+                if(widget.learningTodo != null && widget.learningTodo!.lectureID != null) {
+                  var result = data.where((element) => element.id == widget.learningTodo!.lectureID!);
 
-                  if(widget.learningTodo != null && widget.learningTodo!.parentId != null) {
-                    data.removeWhere((element) => element.id == widget.learningTodo!.id);
-                    var result = data.where((element) => element.id == widget.learningTodo!.parentId!);
+                  if(result.isNotEmpty) {
+                    selectedLecture = result.first;
+                  } else {
+                    selectedLecture = emptyLecture;
+                  }
+                }
 
-                    if(result.isNotEmpty) {
-                      selectedParentLearningTodo = result.first;
-                    } else {
-                      selectedParentLearningTodo = emptyLearningTodo;
-                    }
+                return Container(
+                  decoration: BoxDecoration(
+                    color: selectedLecture?.color,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: DropdownButton(
+                    value: selectedLecture,
+                    underline: const SizedBox.shrink(),
+                    isExpanded: true,
+                    items: data.map((Lecture lecture) {
+                      return DropdownMenuItem<Lecture>(
+                        value: lecture,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: lecture.color,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            margin: const EdgeInsets.all(2),
+                            alignment: Alignment.center,
+                            child: Text(
+                              lecture.title,
+                              style: TextStyle(
+                                color: ThemeData.estimateBrightnessForColor(lecture.color) == Brightness.dark ?
+                                Colors.white :
+                                Colors.black,
+                              ),
+                            )
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (newVal) =>
+                    {
+                      setState(() => {
+                        selectedLecture = newVal!,
+
+                        if(widget.learningTodo != null) {
+                          if (newVal.title != '---')
+                            {
+                              widget.learningTodo!.lectureID = selectedLecture!.id,
+                            }
+                          else
+                            {
+                              widget.learningTodo!.lectureID = null,
+                            }
+                        }
+                      })
+                    },
+                  ),
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          ),
+            FutureBuilder<List<LearningTodo>>(
+            future: _getAllLearningTodos(widget.learningTodo?.id),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                var data = snapshot.data!;
+
+                if(widget.learningTodo != null && widget.learningTodo!.parentId != null) {
+                  data.removeWhere((element) => element.id == widget.learningTodo!.id);
+                  var result = data.where((element) => element.id == widget.learningTodo!.parentId!);
+
+                  if(result.isNotEmpty) {
+                    selectedParentLearningTodo = result.first;
                   } else {
                     selectedParentLearningTodo = emptyLearningTodo;
                   }
-
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: DropdownButton(
-                      value: selectedParentLearningTodo,
-                      underline: const SizedBox.shrink(),
-                      isExpanded: true,
-                      items: data.map((LearningTodo learningTodo) {
-                        return DropdownMenuItem<LearningTodo>(
-                          value: learningTodo,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              margin: const EdgeInsets.all(2),
-                              alignment: Alignment.center,
-                              child: Text(
-                                learningTodo.title,
-                              )
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (newVal) =>
-                      {
-                        setState(() => {
-                          selectedParentLearningTodo = newVal!,
-
-                          if(widget.learningTodo != null) {
-                            if (selectedParentLearningTodo!.title != '---')
-                              {
-                                widget.learningTodo!.parentId = selectedParentLearningTodo!.id,
-                              }
-                            else
-                              {
-                                widget.learningTodo!.parentId = null,
-                              }
-                          }
-                        })
-                      },
-                    ),
-                  );
                 } else {
-                  return const CircularProgressIndicator();
+                  selectedParentLearningTodo = emptyLearningTodo;
                 }
-              },
-            ),
+
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: DropdownButton(
+                    value: selectedParentLearningTodo,
+                    underline: const SizedBox.shrink(),
+                    isExpanded: true,
+                    items: data.map((LearningTodo learningTodo) {
+                      return DropdownMenuItem<LearningTodo>(
+                        value: learningTodo,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            margin: const EdgeInsets.all(2),
+                            alignment: Alignment.center,
+                            child: Text(
+                              learningTodo.title,
+                            )
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (newVal) =>
+                    {
+                      setState(() => {
+                        selectedParentLearningTodo = newVal!,
+
+                        if(widget.learningTodo != null) {
+                          if (selectedParentLearningTodo!.title != '---')
+                            {
+                              widget.learningTodo!.parentId = selectedParentLearningTodo!.id,
+                            }
+                          else
+                            {
+                              widget.learningTodo!.parentId = null,
+                            }
+                        }
+                      })
+                    },
+                  ),
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          ),
           ],
         ),
       ),
