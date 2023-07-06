@@ -35,7 +35,11 @@ class _TodoScreenState extends State<TodoScreen> {
   Widget build(BuildContext context) {
     if(widget.todo != null) {
       titleController.text = widget.todo!.title;
-      descriptionController.text = widget.todo!.note;
+
+      if(widget.todo!.note != null) {
+        descriptionController.text = widget.todo!.note!;
+      }
+      // TODO: Else needed?
 
       if(widget.todo!.alertDate != null) {
         dateTime = widget.todo!.alertDate;
@@ -86,10 +90,14 @@ class _TodoScreenState extends State<TodoScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final title = titleController.value.text;
-          final description = descriptionController.value.text;
+          String? description = descriptionController.value.text;
 
-          if (title.isEmpty || description.isEmpty) {
+          if (title.trim().isEmpty) {
             return;
+          }
+
+          if (description.trim().isEmpty) {
+            description = null;
           }
 
           Navigator.pop(context);

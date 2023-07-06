@@ -38,7 +38,10 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
   Widget build(BuildContext context) {
     if(widget.learningTodo != null) {
       titleController.text = widget.learningTodo!.title;
-      descriptionController.text = widget.learningTodo!.note;
+
+      if(widget.learningTodo!.note != null) {
+        descriptionController.text = widget.learningTodo!.note!;
+      }
 
       if(widget.learningTodo!.alertDate != null) {
         dateTime = widget.learningTodo!.alertDate;
@@ -89,10 +92,14 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final title = titleController.value.text;
-          final description = descriptionController.value.text;
+          String? description = descriptionController.value.text;
 
-          if (title.isEmpty || description.isEmpty) {
+          if (title.trim().isEmpty) {
             return;
+          }
+
+          if (description.trim().isEmpty) {
+            description = null;
           }
 
           Navigator.pop(context);

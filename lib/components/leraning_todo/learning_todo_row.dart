@@ -169,7 +169,7 @@ class _LearningTodoRowListState extends State<LearningTodoRowList> {
                                 endIndent : 10,
                               ),
                               Text(
-                                widget.learningTodo.note,
+                                widget.learningTodo.note != null ? widget.learningTodo.note! : '-',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   color: ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ?

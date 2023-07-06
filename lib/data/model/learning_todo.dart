@@ -5,7 +5,7 @@ class LearningTodo {
   int? parentId;
   bool done;
   String title;
-  String note;
+  String? note;
   DateTime? alertDate;
   int? notificationID;
   int? lectureID;
@@ -48,7 +48,7 @@ class LearningTodoEvent extends LearningTodo implements CalenderEvent {
   LearningTodoEvent({
     required super.done,
     required super.title,
-    required super.note,
+    super.note,
     super.alertDate,
     super.lectureID
   });

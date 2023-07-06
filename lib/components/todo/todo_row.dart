@@ -115,7 +115,7 @@ class _TodoRowState extends State<TodoRow> {
                             endIndent : 10,
                           ),
                           Text(
-                            widget.todo.note,
+                            widget.todo.note != null ? widget.todo.note! : '-',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               color: ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ?

@@ -4,7 +4,7 @@ class ToDo {
   int? id;
   bool done;
   String title;
-  String note;
+  String? note;
   DateTime? alertDate;
   int? notificationID;
   int? lectureID;
@@ -13,7 +13,7 @@ class ToDo {
       {this.id,
       required this.done,
       required this.title,
-      required this.note,
+      this.note,
       this.alertDate,
       this.notificationID,
       this.lectureID,
@@ -44,7 +44,7 @@ class TodoEvent extends ToDo implements CalenderEvent {
   TodoEvent({
     required super.done,
     required super.title,
-    required super.note,
+    super.note,
     super.alertDate,
     super.lectureID
   });

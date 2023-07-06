@@ -94,7 +94,7 @@ class NotificationService {
       scheduledNotification(
           id: todo.notificationID!,
           title: 'Todo: ${todo.title}',
-          body: 'Notiz: ${todo.note}',
+          body: 'Notiz: ${todo.note ?? '-'}',
           alarmDate: todo.alertDate!,
           notificationDetails: NotificationService().notificationDetailsTodo()
       );
@@ -135,7 +135,7 @@ class NotificationService {
       scheduledNotification(
           id: learningTodo.notificationID!,
           title: 'Todo: ${learningTodo.title}',
-          body: 'Notiz: ${learningTodo.note}',
+          body: 'Notiz: ${learningTodo.note ?? '-'}',
           alarmDate: learningTodo.alertDate!,
           notificationDetails: NotificationService().notificationDetailsLearningTodo()
       );
