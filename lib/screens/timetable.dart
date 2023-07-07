@@ -1,5 +1,6 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:keep_on_track/components/drawer.dart';
 import 'package:keep_on_track/components/time_slot/time_slot.dart';
 import 'package:keep_on_track/data/model/time_slot.dart';
 import 'package:keep_on_track/data/model/time_table_event.dart';
@@ -42,7 +43,8 @@ class _TimeTableState extends State<TimeTable> {
           ),
           scaffoldMessengerKey: snackbarKey,
           home: Scaffold(
-          appBar: AppBar(
+            drawer: const CustomDrawer(),
+            appBar: AppBar(
             title: const Text('Stundenplan'),
             actions: const <Widget>[
             ],

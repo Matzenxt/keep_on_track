@@ -14,12 +14,6 @@ class CustomDrawer extends Drawer {
     return Drawer(
       child: ListView(
         children: [
-          const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text("Countdown Klausurphase")
-          ),
           ListTile(
             title: const Text('Stundenplan'),
             onTap: () {

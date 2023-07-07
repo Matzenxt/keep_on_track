@@ -288,6 +288,8 @@ class _LearningTodoScreenState extends State<LearningTodoScreen> {
               }
             },
           ),
+
+            if(widget.learningTodo != null)
             FutureBuilder<List<LearningTodo>>(
             future: _getAllLearningTodos(widget.learningTodo?.id),
             builder: (context, snapshot) {
